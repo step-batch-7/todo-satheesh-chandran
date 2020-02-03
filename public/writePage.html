@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>writePage</title>
+    <link rel="stylesheet" href="./css/writePage.css" />
+  </head>
+  <body>
+    <h1><span style="color: #4caf50;">Task </span>Manager</h1>
+    <div class="lists">
+      <div class="innerBox">
+        <table id="list-table">
+          <tr>
+            <th>Status</th>
+            <th>Items</th>
+            <th></th>
+          </tr>
+          <!-- <tr>
+            <td><input type="checkbox" /></td>
+            <td>satheesh</td>
+            <td><button>Delete</button></td>
+          </tr> -->
+        </table>
+      </div>
+      <div class="innerBox" style="display:flex ;flex-wrap: wrap;">
+        <div class="text-div" style="display: flex;flex-wrap: wrap;">
+          <input
+            type="text"
+            autofocus
+            required
+            placeholder=" Title"
+            id="title-bar"
+          />
+          <button>Add Item</button>
+          <input type="text" autofocus placeholder=" Add Item" id="item-bar" />
+          <input type="submit" value="Save List" class="submit-button" />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

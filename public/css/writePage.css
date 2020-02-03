@@ -1,0 +1,121 @@
+body {
+  text-align: center;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  background-color: rgb(248, 247, 247);
+}
+
+h1 {
+  font-weight: 1;
+  font-size: 50px;
+  padding: 20px;
+}
+
+.lists {
+  justify-content: space-evenly;
+  display: flex;
+  height: 600px;
+  width: 100%;
+  /* border: 1px solid; */
+  flex-wrap: wrap;
+}
+
+.innerBox {
+  height: inherit;
+  width: 45%;
+  /* border: 1px solid red; */
+  overflow: scroll;
+}
+
+/* #item-window {
+  height: 550px;
+  width: 100%;
+  border: 1px solid blue;
+  overflow: scroll;
+} */
+
+.text-div {
+  border: 1px blue;
+  height: 300px;
+  padding: 50px 20px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#title-bar {
+  height: 28px;
+  width: 300px;
+  outline: none;
+  margin: 0 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #4caf50;
+  font-size: large;
+}
+
+#item-bar {
+  height: 28px;
+  width: 445px;
+  outline: none;
+  margin: 0 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #4caf50;
+  font-size: large;
+}
+
+::placeholder {
+  color: #4caf50;
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  height: 25px;
+  outline: none;
+}
+
+.submit-button {
+  background-color: #4caf50;
+  color: white;
+  height: 25px;
+  outline: none;
+}
+
+button:hover {
+  cursor: pointer;
+  /* height: 26px;
+  width: 63px; */
+}
+
+#list-table {
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#list-table td,
+#list-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#list-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#list-table tr:hover {
+  background-color: #ddd;
+}
+
+#list-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4caf50;
+  color: white;
+}
+
+#table-list input {
+  color: #4caf50;
+  outline: none;
+}
