@@ -39,16 +39,30 @@ const parseLists = function(task) {
   return list;
 };
 
+const sendPostRequest = function(url, content) {
+  const req = new XMLHttpRequest();
+  req.open('POST', url);
+  req.send(content);
+};
+
+const getTableTemplate = function() {
+  return `<tr>
+            <th>Status</th>
+            <th>Items</th>
+          </tr>`;
+};
+
 const submitLists = function() {
   const items = Array.from(document.querySelector('#list-table').children);
   items.shift();
+  document.querySelector('#list-table').innerHTML = getTableTemplate();
   const tasks = Array.from(items.map(parseLists));
   const title = document.querySelector('#title-bar').value;
   document.querySelector('#title-bar').value = '';
   const toDoList = {
     tasks: tasks,
     name: title,
-    id: Math.floor(Math.random() * 10000000)
+    id: Date.now()
   };
-  // console.log(JSON.stringify(toDoList));
+  sendPostRequest('/list', JSON.stringify(toDoList));
 };
