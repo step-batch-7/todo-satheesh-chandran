@@ -81,6 +81,9 @@ button {
   height: 25px;
   outline: none;
 }
+.submit-button:hover {
+  cursor: pointer;
+}
 
 button:hover {
   cursor: pointer;
