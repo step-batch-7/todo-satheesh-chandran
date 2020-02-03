@@ -53,8 +53,9 @@ h1 {
 }
 
 #item-bar {
+  visibility: hidden;
   height: 28px;
-  width: 445px;
+  width: 300px;
   outline: none;
   margin: 0 10px;
   background: transparent;
