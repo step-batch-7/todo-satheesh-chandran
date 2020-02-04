@@ -2,9 +2,19 @@
   <head>
     <title>edit page</title>
     <link rel="stylesheet" href="./css/writePage.css" />
+    <link rel="stylesheet" href="./css/editPage.css" />
     <script src="./js/editPage.js"></script>
   </head>
-  <body>
+  <body onload="requestForId()">
     <h1><span style="color: #4caf50;">Task </span>Manager</h1>
+    <div id="task-area">
+      <table id="list-table">
+        <tr>
+          <!-- <th>Status</th> -->
+          <th>Items</th>
+          <th></th>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>

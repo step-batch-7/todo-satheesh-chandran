@@ -1,0 +1,7 @@
+#task-area {
+  height: 550px;
+  margin: 0 auto;
+  width: 750px;
+  border: 1px solid;
+  overflow: scroll;
+}

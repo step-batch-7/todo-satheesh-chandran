@@ -3,17 +3,13 @@ const makeVisible = function() {
   inputBar.style.visibility = 'visible';
 };
 
-const getTaskChildren = function(value) {
-  const checkbox = document.createElement('input');
-  const status = document.createElement('td');
-  const task = document.createElement('td');
-  const tableRow = document.createElement('tr');
+const getTaskChildren = function(taskName) {
+  const getTaskChild = taskName =>
+    `<td><input type="checkbox"/></td><td>${taskName}</td>`;
 
-  checkbox.type = 'checkbox';
-  status.appendChild(checkbox);
-  task.innerText = value;
-  tableRow.appendChild(status);
-  tableRow.appendChild(task);
+  const tableRow = document.createElement('tr');
+  tableRow.innerHTML = getTaskChild(taskName);
+  tableRow.setAttribute('id', Date.now());
   return tableRow;
 };
 
@@ -23,8 +19,7 @@ const addTasks = function(event) {
     const value = target.value;
     target.value = '';
     const tableRow = getTaskChildren(value);
-    tableRow.setAttribute('id', Date.now());
-    document.querySelector('#list-table').appendChild(tableRow);
+    document.querySelector('#list-table tbody').appendChild(tableRow);
     document.querySelector('#item-bar').style.visibility = 'hidden';
   }
 };
@@ -45,16 +40,13 @@ const sendPostRequest = function(url, content) {
   req.send(content);
 };
 
-const getTableTemplate = function() {
-  return `<tr>
-            <th>Status</th>
-            <th>Items</th>
-          </tr>`;
-};
+const getTableTemplate = () =>
+  '<thead><tr><th>Status</th><th>Items</th></tr></thead><tbody></tbody>';
 
 const submitLists = function() {
-  const items = Array.from(document.querySelector('#list-table').children);
-  items.shift();
+  const items = Array.from(
+    document.querySelector('#list-table tbody').children
+  );
   document.querySelector('#list-table').innerHTML = getTableTemplate();
   const tasks = Array.from(items.map(parseLists));
   const title = document.querySelector('#title-bar').value;

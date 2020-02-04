@@ -1,26 +1,24 @@
-const createInnerHTML = function(name) {
-  return `<td>${name}</td>
-  <td>
-  <a href="./home.html">
-  <button onclick="deleteList(event)">Delete</button></a>&emsp;
-  <a href="./editPage.html"><button>Edit</button></a>
-  </td>`;
+// const appendChildHTML = (selector, html) => {
+//   const temp = document.createElement('div');
+//   temp.innerHTML = html;
+//   document.querySelector(selector).appendChild(temp.firstChild);
+// };
+
+const updateTodosOnPage = function(todos) {
+  const toRow = ({ id, name }) =>
+    `<tr><td onclick="viewTodo(${id})">${name}</td>
+    <td id="${id}"><button onclick="deleteList()">delete</button></td></tr>`;
+
+  const trsHTML = todos.map(toRow).join('\n');
+  document.querySelector('#list-table tbody').innerHTML = trsHTML;
 };
 
-const appendChild = function(list) {
-  const tableRow = document.createElement('tr');
-  tableRow.setAttribute('id', list.id);
-  tableRow.innerHTML = createInnerHTML(list.name);
-  document.querySelector('#list-table').appendChild(tableRow);
-};
-
-const sendGetRequest = function() {
+const getJSONFromServer = (url, callback) => {
   const req = new XMLHttpRequest();
   req.onload = function() {
-    const content = JSON.parse(this.response);
-    content.map(appendChild);
+    callback(JSON.parse(this.response));
   };
-  req.open('GET', '/list');
+  req.open('GET', url);
   req.send();
 };
 
@@ -30,10 +28,16 @@ const sendPostRequest = function(url, content) {
   req.send(content);
 };
 
-const deleteList = function(event) {
+const deleteList = function() {
   const target = event.currentTarget;
-  const parent = target.parentElement.parentElement.parentElement;
+  const parent = target.parentElement;
   const id = parent.getAttribute('id');
   sendPostRequest('/delete', id);
-  sendGetRequest();
+  getJSONFromServer('list', updateTodosOnPage);
 };
+
+const main = () => {
+  getJSONFromServer('list', updateTodosOnPage);
+};
+
+window.onload = main;
