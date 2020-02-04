@@ -33,11 +33,11 @@ const deleteList = function() {
   const parent = target.parentElement;
   const id = parent.getAttribute('id');
   sendPostRequest('/delete', id);
-  getJSONFromServer('list', updateTodosOnPage);
+  getJSONFromServer('todos', updateTodosOnPage);
 };
 
 const main = () => {
-  getJSONFromServer('list', updateTodosOnPage);
+  getJSONFromServer('todos', updateTodosOnPage);
 };
 
 window.onload = main;
