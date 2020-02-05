@@ -12,7 +12,7 @@ const updateTodosOnPage = function(todos) {
     <a href="./editPage.html" onclick="sendIdToServer(${id})">${name}</a></td>
     <td id="${id}"><button onclick="deleteList()">delete</button></td></tr>`;
 
-  const trsHTML = todos.map(toRow).join('\n');
+  const trsHTML = todos.todoLists.map(toRow).join('\n');
   document.querySelector('#list-table tbody').innerHTML = trsHTML;
 };
 
@@ -43,4 +43,4 @@ const main = () => {
   getJSONFromServer('todos', updateTodosOnPage);
 };
 
-// window.onload = main;
+window.onload = main;
