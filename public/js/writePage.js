@@ -3,13 +3,12 @@ const makeVisible = function() {
   inputBar.style.visibility = 'visible';
 };
 
-const getTaskChildren = function(taskName) {
-  const getTaskChild = taskName =>
+const getTableRowChild = function(taskName) {
+  const toHTML = taskName =>
     `<td><input type="checkbox"/></td><td>${taskName}</td>`;
 
   const tableRow = document.createElement('tr');
-  tableRow.innerHTML = getTaskChild(taskName);
-  tableRow.setAttribute('id', Date.now());
+  tableRow.innerHTML = toHTML(taskName);
   return tableRow;
 };
 
@@ -18,7 +17,7 @@ const addTasks = function(event) {
   if (event.key === 'Enter') {
     const value = target.value;
     target.value = '';
-    const tableRow = getTaskChildren(value);
+    const tableRow = getTableRowChild(value);
     document.querySelector('#list-table tbody').appendChild(tableRow);
     document.querySelector('#item-bar').style.visibility = 'hidden';
   }
@@ -26,7 +25,6 @@ const addTasks = function(event) {
 
 const parseLists = function(task) {
   const list = {};
-  list.id = task.getAttribute('id');
   const children = Array.from(task.children);
   const status = children[0].children[0].checked;
   list.status = status;
@@ -53,8 +51,7 @@ const submitLists = function() {
   document.querySelector('#title-bar').value = '';
   const toDoList = {
     tasks: tasks,
-    name: title,
-    id: Date.now()
+    name: title
   };
   sendPostRequest('/list', JSON.stringify(toDoList));
 };

@@ -4,9 +4,12 @@
 //   document.querySelector(selector).appendChild(temp.firstChild);
 // };
 
+const sendIdToServer = id => sendPostRequest('tasks', id);
+
 const updateTodosOnPage = function(todos) {
   const toRow = ({ id, name }) =>
-    `<tr><td onclick="viewTodo(${id})">${name}</td>
+    `<tr><td>
+    <a href="./editPage.html" onclick="sendIdToServer(${id})">${name}</a></td>
     <td id="${id}"><button onclick="deleteList()">delete</button></td></tr>`;
 
   const trsHTML = todos.map(toRow).join('\n');
@@ -40,4 +43,4 @@ const main = () => {
   getJSONFromServer('todos', updateTodosOnPage);
 };
 
-window.onload = main;
+// window.onload = main;

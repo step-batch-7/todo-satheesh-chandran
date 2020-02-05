@@ -12,12 +12,16 @@ Delete a todo list
 ---Plans---
 
 * have a design model of the pages
-data structure -- array of object
-  reason-- should be able to show to user in the same order that user entered
-  difficulty-- deletion of any element
-usage of XMLHttpRequest
-deside from where to send the post request... 
-  from the pages or from the js file 
-understand the output format of the checkboxes
-where to place the submit button inside the write page 
-  because the button depends on what data that I want to get
+* data structure -- array of object
+    reason-- should be able to show to user in the same order that user entered
+    difficulty-- deletion of any element
+* usage of XMLHttpRequest
+* deside from where to send the post request... 
+    from the pages or from the js file 
+* understand the output format of the checkboxes
+* where to place the submit button inside the write page 
+    because the button depends on what data that I want to 
+refactorization of writePage.js
+getting the requested clicked element or id of that element
+find a way to store that id so that id is can be easily available to needed functions
+  avoid global variables

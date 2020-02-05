@@ -39,7 +39,7 @@ describe('Not Allowed Method', () => {
       .put('/home.html')
       .expect('Content-Type', 'text/plain')
       .expect('Method Not Allowed')
-      .expect(STATUS_CODES.METHOD_NOT_FOUND, done);
+      .expect(405, done);
   });
 });
 
