@@ -1,3 +1,10 @@
+const deleteTableRow = function(id) {
+  console.log(id);
+  const selectedRow = document.getElementById(id);
+  console.log(selectedRow);
+  document.querySelector('#list-table tbody').removeChild(selectedRow);
+};
+
 const requestForClickedElement = function(url, callback) {
   const req = new XMLHttpRequest();
   req.onload = function() {
@@ -8,10 +15,13 @@ const requestForClickedElement = function(url, callback) {
 };
 
 const getTableRowTemplate = function({ name, id, status }) {
+  console.log(typeof id);
   const toTdElements = () => `<td><input type="checkbox"/></td>
-  <td>${name}</td><td><button>delete</button></td>`;
+  <td>${name}</td>
+  <td><button onclick="deleteTableRow('${id}')">delete</button></td>`;
 
   const tableRow = document.createElement('tr');
+  tableRow.setAttribute('id', id);
   tableRow.innerHTML = toTdElements();
   tableRow.querySelector('td input').checked = status;
   document.querySelector('#list-table tbody').appendChild(tableRow);
@@ -26,6 +36,7 @@ const appendTableRow = function(element) {
 const main = function() {
   requestForClickedElement('/tasks', appendTableRow);
 };
+
 window.onload = main;
 
 // `<tr>
