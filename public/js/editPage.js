@@ -3,10 +3,10 @@
 const requestForId = function() {
   const req = new XMLHttpRequest();
   req.onload = function() {
-    console.log(this.response);
+    console.log(this.responseText);
   };
   req.open('GET', '/tasks');
   req.send();
 };
 
-// window.HTMLBodyElement.onload = requestForId;
+window.onload = requestForId;
