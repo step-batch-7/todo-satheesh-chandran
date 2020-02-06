@@ -32,7 +32,7 @@ const parseLists = function(task) {
   return list;
 };
 
-const sendPostRequest = function(url, content) {
+const sendAddedLists = function(url, content) {
   const req = new XMLHttpRequest();
   req.open('POST', url);
   req.send(content);
@@ -53,5 +53,5 @@ const submitLists = function() {
     tasks: tasks,
     name: title
   };
-  sendPostRequest('/list', JSON.stringify(toDoList));
+  sendAddedLists('/list', JSON.stringify(toDoList));
 };
