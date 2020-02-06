@@ -3,7 +3,7 @@ const deleteTableRow = function(id) {
   document.querySelector('#list-table tbody').removeChild(selectedRow);
 };
 
-const requestForClickedElement = function(url, callback) {
+const requestForElement = function(url, callback) {
   const req = new XMLHttpRequest();
   req.onload = function() {
     callback(JSON.parse(this.responseText));
@@ -13,8 +13,7 @@ const requestForClickedElement = function(url, callback) {
 };
 
 const getTableRowTemplate = function({ name, id, status }) {
-  const toTdElements = () => `<td><input type="checkbox"/></td>
-  <td>${name}</td>
+  const toTdElements = () => `<td><input type="checkbox"/></td><td>${name}</td>
   <td><button onclick="deleteTableRow('${id}')">delete</button></td>`;
 
   const tableRow = document.createElement('tr');
@@ -32,7 +31,7 @@ const appendTableRow = function(todoList) {
 };
 
 const main = function() {
-  requestForClickedElement('/tasks', appendTableRow);
+  requestForElement('/tasks', appendTableRow);
 };
 
 window.onload = main;
@@ -61,10 +60,36 @@ const submitLists = function() {
   const tasks = Array.from(
     document.querySelector('#list-table tbody').children
   );
+  document.querySelector('#list-table tbody').innerHTML = '';
   const modifiedTasks = tasks.map(parseLists);
   const modifiedLists = {
     tasks: modifiedTasks,
     id: document.querySelector('body p').getAttribute('id')
   };
   sendModifiedList('/editedList', JSON.stringify(modifiedLists));
+};
+
+/////////////////////////////////////////////////
+
+const sendAddedTask = function(url, content) {
+  const req = new XMLHttpRequest();
+  req.onload = function() {
+    getTableRowTemplate(JSON.parse(this.responseText));
+  };
+  req.open('POST', url);
+  req.send(content);
+};
+
+const addNewTasks = function(event) {
+  if (event.key === 'Enter') {
+    const taskName = document.querySelector('#title-bar').value;
+    document.querySelector('#title-bar').value = '';
+    const tableRows = Array.from(document.querySelector('tbody').children);
+    const lastTaskId = tableRows[tableRows.length - 1].getAttribute('id');
+    sendAddedTask(
+      'newTask',
+      JSON.stringify({ taskName: taskName, lastTaskId: lastTaskId })
+    );
+    // requestForElement('newTasks', content => console.log(content));
+  }
 };

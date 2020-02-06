@@ -1,5 +1,6 @@
 const makeVisible = function() {
   const inputBar = document.querySelector('#item-bar');
+  document.querySelector('div button').style.visibility = 'hidden';
   inputBar.style.visibility = 'visible';
 };
 
@@ -19,7 +20,7 @@ const addTasks = function(event) {
     target.value = '';
     const tableRow = getTableRowChild(value);
     document.querySelector('#list-table tbody').appendChild(tableRow);
-    document.querySelector('#item-bar').style.visibility = 'hidden';
+    // document.querySelector('#item-bar').style.visibility = 'hidden';
   }
 };
 
