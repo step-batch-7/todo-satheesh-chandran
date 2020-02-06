@@ -80,16 +80,23 @@ const sendAddedTask = function(url, content) {
   req.send(content);
 };
 
+const getLastRableRowId = function() {
+  const tableRows = Array.from(document.querySelector('tbody').children);
+  if (tableRows.length > 0) {
+    return tableRows[tableRows.length - 1].getAttribute('id');
+  }
+  return `${document.querySelector('p').getAttribute('id')}_-1`;
+};
+
 const addNewTasks = function(event) {
   if (event.key === 'Enter') {
     const taskName = document.querySelector('#title-bar').value;
     document.querySelector('#title-bar').value = '';
-    const tableRows = Array.from(document.querySelector('tbody').children);
-    const lastTaskId = tableRows[tableRows.length - 1].getAttribute('id');
+
+    const lastTaskId = getLastRableRowId();
     sendAddedTask(
       'newTask',
       JSON.stringify({ taskName: taskName, lastTaskId: lastTaskId })
     );
-    // requestForElement('newTasks', content => console.log(content));
   }
 };
