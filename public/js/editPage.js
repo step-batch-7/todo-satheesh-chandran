@@ -108,6 +108,7 @@ const replaceName = function(target) {
   if (event.key === 'Enter') {
     const newName = document.querySelector('.popUp-window input').value;
     target.innerText = newName;
+    submitLists();
     document.querySelector('.popUp-window').style.visibility = 'hidden';
     document.querySelector('.lists').classList.remove('invisible');
     document.querySelector('a input').classList.remove('invisible');
