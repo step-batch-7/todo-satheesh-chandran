@@ -52,6 +52,9 @@ const parseLists = function(task) {
 
 const sendModifiedList = function(url, content) {
   const req = new XMLHttpRequest();
+  req.onload = function() {
+    appendTableRow(JSON.parse(this.responseText));
+  };
   req.open('POST', url);
   req.send(content);
 };
@@ -64,7 +67,8 @@ const submitLists = function() {
   const modifiedTasks = tasks.map(parseLists);
   const modifiedLists = {
     tasks: modifiedTasks,
-    id: document.querySelector('body h3').getAttribute('id')
+    id: document.querySelector('body h3').getAttribute('id'),
+    name: document.querySelector('h3 span').innerText
   };
   sendModifiedList('/editedList', JSON.stringify(modifiedLists));
 };
@@ -102,14 +106,20 @@ const addNewTasks = function(event) {
 
 const replaceName = function(target) {
   if (event.key === 'Enter') {
-    console.log(document.querySelector('.popUp-window input').value);
+    const newName = document.querySelector('.popUp-window input').value;
+    target.innerText = newName;
+    document.querySelector('.popUp-window').style.visibility = 'hidden';
+    document.querySelector('.lists').classList.remove('invisible');
+    document.querySelector('a input').classList.remove('invisible');
   }
 };
 
 const popUpEditWindow = function() {
+  const inputTag = document.querySelector('.popUp-window input');
   document.querySelector('.popUp-window').style.visibility = 'visible';
   document.querySelector('.lists').classList.add('invisible');
-  const inputTag = document.querySelector('.popUp-window input');
-  inputTag.value = event.currentTarget.innerText;
-  inputTag.onkeydown = () => replaceName(event.currentTarget);
+  document.querySelector('a input').classList.add('invisible');
+  const currentTarget = event.currentTarget;
+  inputTag.value = currentTarget.innerText;
+  inputTag.onkeydown = () => replaceName(currentTarget);
 };
