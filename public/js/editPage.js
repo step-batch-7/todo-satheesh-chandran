@@ -24,8 +24,8 @@ const getTableRowTemplate = function({ name, id, status }) {
 };
 
 const appendTableRow = function(todoList) {
-  document.querySelector('body p').innerText = todoList.name;
-  document.querySelector('body p').setAttribute('id', todoList.id);
+  document.querySelector('body h3 span').innerText = todoList.name;
+  document.querySelector('body h3').setAttribute('id', todoList.id);
   const tasks = todoList.tasks;
   tasks.forEach(getTableRowTemplate);
 };
@@ -64,7 +64,7 @@ const submitLists = function() {
   const modifiedTasks = tasks.map(parseLists);
   const modifiedLists = {
     tasks: modifiedTasks,
-    id: document.querySelector('body p').getAttribute('id')
+    id: document.querySelector('body h3').getAttribute('id')
   };
   sendModifiedList('/editedList', JSON.stringify(modifiedLists));
 };
@@ -85,18 +85,31 @@ const getLastRableRowId = function() {
   if (tableRows.length > 0) {
     return tableRows[tableRows.length - 1].getAttribute('id');
   }
-  return `${document.querySelector('p').getAttribute('id')}_-1`;
+  return `${document.querySelector('h3').getAttribute('id')}_-1`;
 };
 
 const addNewTasks = function(event) {
   if (event.key === 'Enter') {
     const taskName = document.querySelector('#title-bar').value;
     document.querySelector('#title-bar').value = '';
-
     const lastTaskId = getLastRableRowId();
-    sendAddedTask(
-      'newTask',
-      JSON.stringify({ taskName: taskName, lastTaskId: lastTaskId })
-    );
+    const addedTask = { taskName: taskName, lastTaskId: lastTaskId };
+    sendAddedTask('newTask', JSON.stringify(addedTask));
   }
+};
+
+/////////////////////////////////////////////////
+
+const replaceName = function(target) {
+  if (event.key === 'Enter') {
+    console.log(document.querySelector('.popUp-window input').value);
+  }
+};
+
+const popUpEditWindow = function() {
+  document.querySelector('.popUp-window').style.visibility = 'visible';
+  document.querySelector('.lists').classList.add('invisible');
+  const inputTag = document.querySelector('.popUp-window input');
+  inputTag.value = event.currentTarget.innerText;
+  inputTag.onkeydown = () => replaceName(event.currentTarget);
 };

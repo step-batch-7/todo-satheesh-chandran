@@ -8,8 +8,7 @@ const sendIdToServer = id => sendPostRequest('tasks', id);
 
 const updateTodosOnPage = function(todos) {
   const toRow = ({ id, name }) =>
-    `<tr><td>
-    <a href="./editPage.html?todoId=${id}">${name}</a></td>
+    `<tr><td><a href="./editPage.html?todoId=${id}">${name}</a></td>
     <td id="${id}"><button onclick="deleteList()">delete</button></td></tr>`;
 
   const trsHTML = todos.todoLists.map(toRow).join('\n');

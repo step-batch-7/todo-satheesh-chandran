@@ -1,11 +1,3 @@
-#task-area {
-  height: 550px;
-  margin: 0 auto;
-  width: 750px;
-  /* border: 1px solid; */
-  overflow: scroll;
-}
-
 .popUp-window {
   position: absolute;
   visibility: hidden;
@@ -26,17 +18,6 @@
   pointer-events: none;
 }
 
-h3 > u > span:hover {
+h3 > span:hover {
   cursor: pointer;
-}
-
-#edit-bar {
-  height: 28px;
-  width: 300px;
-  outline: none;
-  margin: 0 10px;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #4caf50;
-  font-size: large;
 }
