@@ -13,8 +13,9 @@ const requestForElement = function(url, callback) {
 };
 
 const getTableRowTemplate = function({ name, id, status }) {
-  const toTdElements = () => `<td><input type="checkbox"/></td><td>${name}</td>
-  <td><button onclick="deleteTableRow('${id}')">delete</button></td>`;
+  const toTdElements = () => `<td><input type="checkbox"/></td>
+    <td onclick="popUpEditWindow()">${name}</td>
+    <td><button onclick="deleteTableRow('${id}')">delete</button></td>`;
 
   const tableRow = document.createElement('tr');
   tableRow.setAttribute('id', id);
@@ -121,6 +122,6 @@ const popUpEditWindow = function() {
   document.querySelector('.lists').classList.add('invisible');
   document.querySelector('a input').classList.add('invisible');
   const currentTarget = event.currentTarget;
-  inputTag.value = currentTarget.innerText;
+  inputTag.value = currentTarget.innerHTML;
   inputTag.onkeydown = () => replaceName(currentTarget);
 };
