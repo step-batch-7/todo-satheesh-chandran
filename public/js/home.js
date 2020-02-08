@@ -43,3 +43,14 @@ const main = () => {
 };
 
 window.onload = main;
+
+/////////////////////////////////////////////////
+
+const toggleSearchBar = function() {
+  if (document.querySelector('#check').checked) {
+    document.querySelector('#todo').classList.add('invisible');
+    return document.querySelector('#task').classList.remove('invisible');
+  }
+  document.querySelector('#todo').classList.remove('invisible');
+  return document.querySelector('#task').classList.add('invisible');
+};

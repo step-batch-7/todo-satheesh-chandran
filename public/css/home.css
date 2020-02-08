@@ -70,21 +70,7 @@ a {
 
 /* related to search-box */
 
-#todo-search-bar {
-  height: 28px;
-  width: 300px;
-  outline: none;
-  margin-left: 50px;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #4caf50;
-  font-size: large;
-  font-style: italic;
-  margin-top: 10px;
-  margin-right: 10px;
-}
-
-#task-search-bar {
+.search-bar {
   height: 28px;
   width: 300px;
   outline: none;
@@ -137,6 +123,11 @@ a {
   background: white;
 }
 
-.task {
+#task {
+  position: absolute;
+}
+
+.invisible {
   display: none;
+  pointer-events: none;
 }
