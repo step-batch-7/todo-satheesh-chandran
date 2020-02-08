@@ -58,7 +58,7 @@ const toggleSearchBar = function() {
 const showMatched = function(searchValue, rows) {
   const matchValue = row => {
     if (row.textContent.match(searchValue)) {
-      row.style.visibility = 'visible';
+      row.style.display = '';
     }
   };
   rows.forEach(matchValue);
@@ -66,9 +66,11 @@ const showMatched = function(searchValue, rows) {
 
 const filterMatched = function() {
   const searchValue = event.target.value;
+  const tableRows = Array.from(document.querySelector('tbody').children);
+  
   if (searchValue !== '') {
-    const tableRows = Array.from(document.querySelector('tbody').children);
-    tableRows.forEach(row => (row.style.visibility = 'hidden'));
-    showMatched(searchValue, tableRows);
+    tableRows.forEach(row => (row.style.display = 'none'));
+    return showMatched(searchValue, tableRows);
   }
+  tableRows.forEach(row => (row.style.display = ''));
 };
