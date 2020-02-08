@@ -25,3 +25,4 @@ refactorization of writePage.js
 getting the requested clicked element or id of that element
 find a way to store that id so that id is can be easily available to needed functions
   avoid global variables
+deal with empty input

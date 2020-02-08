@@ -13,7 +13,7 @@ h1 {
 .lists {
   justify-content: space-evenly;
   display: flex;
-  height: 600px;
+  height: 500px;
   width: 100%;
   /* border: 1px solid; */
   flex-wrap: wrap;
@@ -50,6 +50,7 @@ h1 {
   border: none;
   border-bottom: 1px solid #4caf50;
   font-size: large;
+  font-style: italic;
 }
 
 #item-bar {
@@ -62,6 +63,7 @@ h1 {
   border: none;
   border-bottom: 1px solid #4caf50;
   font-size: large;
+  font-style: italic;
 }
 
 ::placeholder {

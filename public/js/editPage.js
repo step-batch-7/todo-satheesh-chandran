@@ -14,7 +14,7 @@ const requestForElement = function(url, callback) {
 
 const getTableRowTemplate = function({ name, id, status }) {
   const toTdElements = () => `<td><input type="checkbox"/></td>
-    <td onclick="popUpEditWindow()">${name}</td>
+    <td onclick="popUpEditWindow()" style="cursor: pointer;">${name}</td>
     <td><button onclick="deleteTableRow('${id}')">delete</button></td>`;
 
   const tableRow = document.createElement('tr');
@@ -37,11 +37,7 @@ const main = function() {
 
 window.onload = main;
 
-// `<tr>
-//  <td><input type="checkbox" /></td>
-//  <td>sruthy</td>
-//  <td><button>delete</button></td>
-//  </tr>`;
+/////////////////////////////////////////////////
 
 const parseLists = function(task) {
   const list = {};
@@ -105,14 +101,15 @@ const addNewTasks = function(event) {
 
 /////////////////////////////////////////////////
 
-const replaceName = function(target) {
-  if (event.key === 'Enter') {
-    const newName = document.querySelector('.popUp-window input').value;
+const replaceName = function(target, inputTag) {
+  if (event.key === 'Enter' && inputTag.value !== '') {
+    const newName = inputTag.value;
     target.innerText = newName;
     submitLists();
     document.querySelector('.popUp-window').style.visibility = 'hidden';
     document.querySelector('.lists').classList.remove('invisible');
     document.querySelector('a input').classList.remove('invisible');
+    document.querySelector('a').style.pointerEvents = 'auto';
   }
 };
 
@@ -121,7 +118,8 @@ const popUpEditWindow = function() {
   document.querySelector('.popUp-window').style.visibility = 'visible';
   document.querySelector('.lists').classList.add('invisible');
   document.querySelector('a input').classList.add('invisible');
+  document.querySelector('a').style.pointerEvents = 'none';
   const currentTarget = event.currentTarget;
   inputTag.value = currentTarget.innerHTML;
-  inputTag.onkeydown = () => replaceName(currentTarget);
+  inputTag.onkeydown = () => replaceName(currentTarget, inputTag);
 };

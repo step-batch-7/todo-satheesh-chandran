@@ -2,19 +2,20 @@
   <head>
     <title>ToDo</title>
     <link rel="stylesheet" href="./css/home.css" />
-    <script src="./js/home.js"></script>
+    <link rel="stylesheet" href="./css/trial.css" />
+    <!-- <script src="./js/home.js"></script> -->
   </head>
   <body>
     <div style="display: flex;justify-content: flex-end;">
       <div class="search-box">
-        <div class="todo">
+        <div id="todo">
           <input
             type="text"
             id="todo-search-bar"
             placeholder="Search By List"
           />
         </div>
-        <div class="task">
+        <div id="task">
           <input
             type="text"
             id="task-search-bar"
@@ -31,13 +32,13 @@
         </label>
       </div>
     </div>
-
+    
     <h1><span style="color: #4caf50;">Task </span>Manager</h1>
     <p>
       Click on <span style="color: #4caf50;"> NAME OF LIST </span>to view the
       tasks
     </p>
-    <div class="lists">
+    <div class="lists" style="height: 500px;">
       <div class="innerBox">
         <table id="list-table">
           <thead>
@@ -49,7 +50,11 @@
           <tbody></tbody>
         </table>
       </div>
-      <a href="./writePage.html"><button>ADD NEW LIST</button></a>
+      <div>
+        <div>
+          <a href="./writePage.html"><button>ADD NEW LIST</button></a>
+        </div>
+      </div>
     </div>
   </body>
 </html>

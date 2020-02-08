@@ -8,12 +8,13 @@ h1 {
   font-weight: 1;
   font-size: 50px;
   padding: 20px;
+  margin-top: 0px;
 }
 
 .lists {
   justify-content: space-evenly;
   display: flex;
-  height: 600px;
+  height: 500px;
   width: 100%;
   /* border: 1px solid; */
   flex-wrap: wrap;
@@ -65,4 +66,77 @@ button:hover {
 
 a {
   color: black;
+}
+
+/* related to search-box */
+
+#todo-search-bar {
+  height: 28px;
+  width: 300px;
+  outline: none;
+  margin-left: 50px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #4caf50;
+  font-size: large;
+  font-style: italic;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+#task-search-bar {
+  height: 28px;
+  width: 300px;
+  outline: none;
+  margin-left: 50px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #4caf50;
+  font-size: large;
+  font-style: italic;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.search-box {
+  display: flex;
+  justify-content: flex-end;
+  color: #4caf50;
+  /* border: 1px solid; */
+}
+
+::placeholder {
+  color: #4caf50;
+}
+
+#check {
+  display: none;
+}
+
+#check + label > div {
+  height: 3.5vh;
+  width: 3vw;
+  background: rgb(219, 219, 219);
+  border-radius: 15px;
+  display: flex;
+  /* border: 1px solid; */
+  align-items: center;
+  padding: 0 2px;
+  cursor: pointer;
+}
+
+#check:checked + label > div {
+  flex-direction: row-reverse;
+  background: #4caf50;
+}
+
+#check + label > div > div {
+  height: 2.8vh;
+  width: 1.5vw;
+  border-radius: 50%;
+  background: white;
+}
+
+.task {
+  display: none;
 }
