@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-parens */
 // const appendChildHTML = (selector, html) => {
 //   const temp = document.createElement('div');
 //   temp.innerHTML = html;
@@ -6,13 +7,30 @@
 
 const sendIdToServer = id => sendPostRequest('tasks', id);
 
-const updateTodosOnPage = function(todos) {
-  const toRow = ({ id, name }) =>
+const getListRows = function(todos) {
+  const toTodoRow = ({ id, name }) =>
     `<tr><td><a href="./editPage.html?todoId=${id}">${name}</a></td>
     <td id="${id}"><button onclick="deleteList()">delete</button></td></tr>`;
 
-  const trsHTML = todos.todoLists.map(toRow).join('\n');
+  return todos.todoLists.map(toTodoRow).join('\n');
+};
+
+const getTaskRows = function(todos) {
+  const toTaskRow = ({ id, name, tasks }) => {
+    const todoName = name;
+    const toRow = ({ name }) => `<tr><td>${name}</td>
+    <td><a href="./editPage.html?todoId=${id}">${todoName}</a></td></tr>`;
+    return tasks.map(toRow).join('\n');
+  };
+  const taskRows = todos.todoLists.map(toTaskRow);
+  return taskRows;
+};
+
+const updateTodosOnPage = function(todos) {
+  const trsHTML = getListRows(todos);
+  const listHTML = getTaskRows(todos);
   document.querySelector('#list-table tbody').innerHTML = trsHTML;
+  document.querySelector('.list-table tbody').innerHTML = listHTML.join('\n');
 };
 
 const getJSONFromServer = (url, callback) => {
@@ -64,13 +82,29 @@ const showMatched = function(searchValue, rows) {
   rows.forEach(matchValue);
 };
 
-const filterMatched = function() {
+const filterMatchedList = function() {
   const searchValue = event.target.value;
   const tableRows = Array.from(document.querySelector('tbody').children);
-  
+
   if (searchValue !== '') {
     tableRows.forEach(row => (row.style.display = 'none'));
     return showMatched(searchValue, tableRows);
   }
   tableRows.forEach(row => (row.style.display = ''));
+};
+
+const filterMatchedTask = function() {
+  const searchValue = event.target.value;
+  const tableRows = Array.from(
+    document.querySelector('.list-table tbody').children
+  );
+  if (searchValue !== '') {
+    document.querySelector('.innerBox').classList.add('hide');
+    document.querySelector('.hiddenBox').classList.remove('hide');
+    tableRows.forEach(row => (row.style.display = 'none'));
+    return showMatched(searchValue, tableRows);
+  }
+  tableRows.forEach(row => (row.style.display = ''));
+  document.querySelector('.innerBox').classList.remove('hide');
+  document.querySelector('.hiddenBox').classList.add('hide');
 };

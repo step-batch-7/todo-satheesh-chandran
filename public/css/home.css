@@ -12,7 +12,7 @@ h1 {
 }
 
 .lists {
-  justify-content: space-evenly;
+  justify-content: space-between;
   display: flex;
   height: 500px;
   width: 100%;
@@ -27,13 +27,6 @@ button {
 }
 button:hover {
   cursor: pointer;
-}
-
-.innerBox {
-  height: inherit;
-  width: 60%;
-  /* border: 1px solid red; */
-  overflow: scroll;
 }
 
 #list-table {
@@ -130,4 +123,54 @@ a {
 .invisible {
   display: none;
   pointer-events: none;
+}
+
+.hide {
+  visibility: hidden;
+  position: absolute;
+}
+
+.innerBox {
+  /* visibility: hidden; */
+  height: inherit;
+  width: 60%;
+  /* border: 1px solid red; */
+  overflow: scroll;
+}
+
+.hiddenBox {
+  height: inherit;
+  width: 60%;
+  /* border: 1px solid red; */
+  overflow: scroll;
+}
+
+/* class for listing the tasks.... */
+
+.list-table {
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.list-table td,
+.list-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.list-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.list-table tr:hover {
+  background-color: #ddd;
+}
+
+.list-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4caf50;
+  color: white;
 }

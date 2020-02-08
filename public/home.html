@@ -12,11 +12,16 @@
             type="text"
             class="search-bar"
             placeholder="Search By List"
-            oninput="filterMatched()"
+            oninput="filterMatchedList()"
           />
         </div>
         <div id="task" class="invisible">
-          <input type="text" class="search-bar" placeholder="Search By Task" />
+          <input
+            type="text"
+            class="search-bar"
+            placeholder="Search By Task"
+            oninput="filterMatchedTask()"
+          />
         </div>
       </div>
       <div style="padding: 20px;">
@@ -40,6 +45,17 @@
             <tr>
               <th>Lists</th>
               <th>Options</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="hiddenBox hide">
+        <table class="list-table">
+          <thead>
+            <tr>
+              <th>Tasks</th>
+              <th>Parent Task</th>
             </tr>
           </thead>
           <tbody></tbody>
