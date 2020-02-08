@@ -52,5 +52,23 @@ const toggleSearchBar = function() {
     return document.querySelector('#task').classList.remove('invisible');
   }
   document.querySelector('#todo').classList.remove('invisible');
-  return document.querySelector('#task').classList.add('invisible');
+  document.querySelector('#task').classList.add('invisible');
+};
+
+const showMatched = function(searchValue, rows) {
+  const matchValue = row => {
+    if (row.textContent.match(searchValue)) {
+      row.style.visibility = 'visible';
+    }
+  };
+  rows.forEach(matchValue);
+};
+
+const filterMatched = function() {
+  const searchValue = event.target.value;
+  if (searchValue !== '') {
+    const tableRows = Array.from(document.querySelector('tbody').children);
+    tableRows.forEach(row => (row.style.visibility = 'hidden'));
+    showMatched(searchValue, tableRows);
+  }
 };

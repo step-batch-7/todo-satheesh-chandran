@@ -90,8 +90,9 @@ const getLastRableRowId = function() {
 };
 
 const addNewTasks = function(event) {
-  if (event.key === 'Enter') {
-    const taskName = document.querySelector('#title-bar').value;
+  const inputTag = document.querySelector('#title-bar');
+  if (event.key === 'Enter' && inputTag.value.trim() !== '') {
+    const taskName = inputTag.value;
     document.querySelector('#title-bar').value = '';
     const lastTaskId = getLastRableRowId();
     const addedTask = { taskName: taskName, lastTaskId: lastTaskId };
@@ -102,7 +103,7 @@ const addNewTasks = function(event) {
 /////////////////////////////////////////////////
 
 const replaceName = function(target, inputTag) {
-  if (event.key === 'Enter' && inputTag.value !== '') {
+  if (event.key === 'Enter' && inputTag.value.trim() !== '') {
     const newName = inputTag.value;
     target.innerText = newName;
     submitLists();

@@ -15,7 +15,7 @@ const getTableRowChild = function(taskName) {
 
 const addTasks = function(event) {
   const target = event.currentTarget;
-  if (event.key === 'Enter') {
+  if (event.key === 'Enter' && target.value.trim() !== '') {
     const value = target.value;
     target.value = '';
     const tableRow = getTableRowChild(value);
