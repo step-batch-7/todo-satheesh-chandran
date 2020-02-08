@@ -6,7 +6,7 @@ const { app } = require('../lib/handlers');
 const STATUS_CODES = { OK: 200, METHOD_NOT_FOUND: 400, REDIRECT: 301 };
 
 describe('GET request for static files', function() {
-  it('should give the home page with url /', function(done) {
+  it('should give the home page with url /', done => {
     request(app.serve.bind(app))
       .get('/')
       .expect('Content-Type', 'text/html')
@@ -14,7 +14,7 @@ describe('GET request for static files', function() {
       .expect(STATUS_CODES.OK, done);
   });
 
-  it('should give the home page with url /home.html', function(done) {
+  it('should give the home page with url /home.html', done => {
     request(app.serve.bind(app))
       .get('/home.html')
       .expect('Content-Type', 'text/html')
@@ -24,7 +24,7 @@ describe('GET request for static files', function() {
 });
 
 describe('GET request for non existing files', function() {
-  it('should return a 404 message ', function(done) {
+  it('should return a 404 message ', done => {
     request(app.serve.bind(app))
       .get('/ajhsdfnbjhbk')
       .expect('Content-Type', 'text/html')
@@ -54,6 +54,45 @@ describe('POST request for saving the newly added todo lists', function() {
     request(app.serve.bind(app))
       .post('/list')
       .send(JSON.stringify(todoList))
+      .expect(STATUS_CODES.OK, done);
+  });
+  after(() => sinon.restore());
+});
+
+describe('POST for newTask', function() {
+  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+  it('should save the new task given with url /newTask', done => {
+    const addedList = { lastTaskId: '1_0', taskName: 'hai' };
+    request(app.serve.bind(app))
+      .post('/newTask')
+      .send(JSON.stringify(addedList))
+      .expect(STATUS_CODES.OK, done);
+  });
+  after(() => sinon.restore());
+});
+
+describe('POST of editted tasks', function() {
+  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+  it('should save the editted list for url /editedList', done => {
+    const addedList = `{
+      "tasks":[{"status":true,"name":"new one","id":"10_1"}],
+      "id":"10","name":"satheesh chandran"
+      }`;
+
+    request(app.serve.bind(app))
+      .post('/editedList')
+      .send(addedList)
+      .expect(STATUS_CODES.OK, done);
+  });
+  after(() => sinon.restore());
+});
+
+describe('POST of deleting todo list', function() {
+  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+  it('should delete the requested list from memory for url /delete', done => {
+    request(app.serve.bind(app))
+      .post('/delete')
+      .send('1')
       .expect(STATUS_CODES.OK, done);
   });
   after(() => sinon.restore());
