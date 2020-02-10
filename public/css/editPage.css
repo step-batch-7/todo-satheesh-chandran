@@ -24,6 +24,10 @@
   pointer-events: none;
 }
 
+h3 {
+  color: #4caf50;
+}
+
 h3 > u > span:hover {
   cursor: pointer;
 }

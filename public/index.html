@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <title>login</title>
+    <link rel="stylesheet" href="./css/index.css" />
+    <script src="./js/index.js"></script>
+  </head>
+  <body>
+    <h1><span>Task </span>Manager</h1>
+    <div class="platform">
+      <div id="login-window">
+        <h3>LOGIN WINDOW</h3>
+        <br />
+        <!-- form action for login -->
+        <form action="login" method="POST">
+          <input
+            type="text"
+            placeholder="User name"
+            autofocus
+            class="text-bar"
+          /><br /><br />
+          <input
+            type="text"
+            placeholder="Password"
+            class="text-bar"
+          /><br /><br /><br />
+          <input
+            type="submit"
+            name="Login"
+            class="submit-button"
+            value="Login"
+          />
+        </form>
+        <!-- form action for login -->
+        <button onclick="toggleWindow()">Sign Up ?</button>
+      </div>
+      <div id="signup-window" class="invisible">
+        <h3>SIGN UP WINDOW</h3>
+        <br />
+        <!-- form action for signup -->
+        <form action="signup" method="POST">
+          <input
+            type="text"
+            placeholder="User name"
+            class="text-bar"
+          /><br /><br />
+          <input
+            type="text"
+            placeholder="Password"
+            class="text-bar"
+          /><br /><br />
+          <input
+            type="text"
+            placeholder="Retype Password"
+            class="text-bar"
+          /><br /><br /><br />
+          <input
+            type="submit"
+            name="Signup"
+            class="submit-button"
+            value="Signup"
+          />
+        </form>
+        <!-- form action for signup -->
+      </div>
+    </div>
+  </body>
+</html>

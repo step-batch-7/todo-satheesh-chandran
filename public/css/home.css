@@ -11,6 +11,10 @@ h1 {
   margin-top: 0px;
 }
 
+span {
+  color: #4caf50;
+}
+
 .lists {
   justify-content: space-between;
   display: flex;
@@ -131,7 +135,6 @@ a {
 }
 
 .innerBox {
-  /* visibility: hidden; */
   height: inherit;
   width: 60%;
   /* border: 1px solid red; */

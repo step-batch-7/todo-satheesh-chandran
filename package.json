@@ -7,7 +7,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "export DATA_STORE=$(pwd)/test/todo.json; nyc mocha",
     "start": "node server.js"
   },
   "repository": {
