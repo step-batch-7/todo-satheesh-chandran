@@ -4,13 +4,15 @@ const deleteTableRow = function(id) {
   submitLists();
 };
 
-const requestForElement = function(url, callback) {
+const sendXHR = function(method, url, callback, message = '') {
   const req = new XMLHttpRequest();
   req.onload = function() {
-    callback(JSON.parse(this.responseText));
+    if (this.status === 200) {
+      callback(JSON.parse(this.responseText));
+    }
   };
-  req.open('GET', url);
-  req.send();
+  req.open(method, url);
+  req.send(message);
 };
 
 const getTableRowTemplate = function({ name, id, status }) {
@@ -32,7 +34,7 @@ const appendTableRow = function(todoList) {
 };
 
 const main = function() {
-  requestForElement('/tasks', appendTableRow);
+  sendXHR('GET', '/tasks', appendTableRow);
 };
 
 window.onload = main;
