@@ -142,25 +142,12 @@ describe('POST request for saving the newly added todo lists', function() {
   before(() => sinon.replace(fs, 'writeFileSync', () => {}));
   it('should save the given new todo list for url /list', done => {
     const todoList = {
-      tasks: [{ id: '1580814492961', status: false, name: 'hai' }],
-      name: 'satheesh',
-      id: 1580814494776
+      tasks: [{ status: false, name: 'hai' }],
+      name: 'satheesh'
     };
     request(app.serve.bind(app))
       .post('/list')
       .send(JSON.stringify(todoList))
-      .expect(STATUS_CODES.OK, done);
-  });
-  after(() => sinon.restore());
-});
-
-describe('POST for deleting tasks', function() {
-  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
-  it('should delete tasks for url /deleteTask', done => {
-    const deletedTask = { todoId: '1', taskId: '1' };
-    request(app.serve.bind(app))
-      .post('/deleteTask')
-      .send(JSON.stringify(deletedTask))
       .expect(STATUS_CODES.OK, done);
   });
   after(() => sinon.restore());
@@ -173,6 +160,30 @@ describe('POST for newTask', function() {
     request(app.serve.bind(app))
       .post('/newTask')
       .send(JSON.stringify(addedList))
+      .expect(STATUS_CODES.OK, done);
+  });
+  after(() => sinon.restore());
+});
+
+describe('POST for toggling the status tasks', function() {
+  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+  it('should delete tasks for url /toggleStatus', done => {
+    const body = { todoId: '1', taskId: '1' };
+    request(app.serve.bind(app))
+      .post('/toggleStatus')
+      .send(JSON.stringify(body))
+      .expect(STATUS_CODES.OK, done);
+  });
+  after(() => sinon.restore());
+});
+
+describe('POST for deleting tasks', function() {
+  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+  it('should delete tasks for url /deleteTask', done => {
+    const deletedTask = { todoId: '1', taskId: '2' };
+    request(app.serve.bind(app))
+      .post('/deleteTask')
+      .send(JSON.stringify(deletedTask))
       .expect(STATUS_CODES.OK, done);
   });
   after(() => sinon.restore());
