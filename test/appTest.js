@@ -5,7 +5,7 @@ const { app } = require('../lib/handlers');
 
 const STATUS_CODES = { OK: 200, METHOD_NOT_FOUND: 400, REDIRECT: 301 };
 
-describe('GET request for static files', function() {
+describe('GET', function() {
   describe('home page', function() {
     it('should give the home.html for url /', done => {
       request(app.serve.bind(app))
@@ -138,64 +138,78 @@ describe('Not Allowed Method', () => {
   });
 });
 
-describe('POST request for saving the newly added todo lists', function() {
-  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
-  it('should save the given new todo list for url /list', done => {
-    const todoList = {
-      tasks: [{ status: false, name: 'hai' }],
-      name: 'satheesh'
-    };
-    request(app.serve.bind(app))
-      .post('/list')
-      .send(JSON.stringify(todoList))
-      .expect(STATUS_CODES.OK, done);
+describe('POST', function() {
+  describe('request for saving the newly added todo lists', function() {
+    before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+    it('should save the given new todo list for url /list', done => {
+      const todoList = {
+        tasks: [{ status: false, name: 'hai' }],
+        name: 'satheesh'
+      };
+      request(app.serve.bind(app))
+        .post('/list')
+        .send(JSON.stringify(todoList))
+        .expect(STATUS_CODES.OK, done);
+    });
+    after(() => sinon.restore());
   });
-  after(() => sinon.restore());
-});
 
-describe('POST for newTask', function() {
-  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
-  it('should save the new task given with url /newTask', done => {
-    const addedList = { todoId: '1', taskName: 'hai' };
-    request(app.serve.bind(app))
-      .post('/newTask')
-      .send(JSON.stringify(addedList))
-      .expect(STATUS_CODES.OK, done);
+  describe('POST for newTask', function() {
+    before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+    it('should save the new task given with url /newTask', done => {
+      const addedList = { todoId: '1', taskName: 'hai' };
+      request(app.serve.bind(app))
+        .post('/newTask')
+        .send(JSON.stringify(addedList))
+        .expect(STATUS_CODES.OK, done);
+    });
+    after(() => sinon.restore());
   });
-  after(() => sinon.restore());
-});
 
-describe('POST for toggling the status tasks', function() {
-  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
-  it('should delete tasks for url /toggleStatus', done => {
-    const body = { todoId: '1', taskId: '1' };
-    request(app.serve.bind(app))
-      .post('/toggleStatus')
-      .send(JSON.stringify(body))
-      .expect(STATUS_CODES.OK, done);
+  describe('POST for toggling the status tasks', function() {
+    before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+    it('should delete tasks for url /toggleStatus', done => {
+      const body = { todoId: '1', taskId: '1' };
+      request(app.serve.bind(app))
+        .post('/toggleStatus')
+        .send(JSON.stringify(body))
+        .expect(STATUS_CODES.OK, done);
+    });
+    after(() => sinon.restore());
   });
-  after(() => sinon.restore());
-});
 
-describe('POST for deleting tasks', function() {
-  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
-  it('should delete tasks for url /deleteTask', done => {
-    const deletedTask = { todoId: '1', taskId: '2' };
-    request(app.serve.bind(app))
-      .post('/deleteTask')
-      .send(JSON.stringify(deletedTask))
-      .expect(STATUS_CODES.OK, done);
+  describe('request for editing task name', function() {
+    before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+    it('should edit the name of the task for url /editTask', done => {
+      const body = { taskId: 1, todoId: 1, value: 'some' };
+      request(app.serve.bind(app))
+        .post('/editTask')
+        .send(JSON.stringify(body))
+        .expect(STATUS_CODES.OK, done);
+    });
+    after(() => sinon.restore());
   });
-  after(() => sinon.restore());
-});
 
-describe('POST of deleting todo list', function() {
-  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
-  it('should delete the requested list from memory for url /delete', done => {
-    request(app.serve.bind(app))
-      .post('/delete')
-      .send('1')
-      .expect(STATUS_CODES.OK, done);
+  describe('POST for deleting tasks', function() {
+    before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+    it('should delete tasks for url /deleteTask', done => {
+      const deletedTask = { todoId: '1', taskId: '2' };
+      request(app.serve.bind(app))
+        .post('/deleteTask')
+        .send(JSON.stringify(deletedTask))
+        .expect(STATUS_CODES.OK, done);
+    });
+    after(() => sinon.restore());
   });
-  after(() => sinon.restore());
+
+  describe('POST of deleting todo list', function() {
+    before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+    it('should delete the requested list from memory for url /delete', done => {
+      request(app.serve.bind(app))
+        .post('/delete')
+        .send('1')
+        .expect(STATUS_CODES.OK, done);
+    });
+    after(() => sinon.restore());
+  });
 });
