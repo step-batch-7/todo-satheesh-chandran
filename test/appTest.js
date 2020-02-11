@@ -157,7 +157,7 @@ describe('POST request for saving the newly added todo lists', function() {
 describe('POST for newTask', function() {
   before(() => sinon.replace(fs, 'writeFileSync', () => {}));
   it('should save the new task given with url /newTask', done => {
-    const addedList = { lastTaskId: '1_0', taskName: 'hai' };
+    const addedList = { todoId: '1', taskName: 'hai' };
     request(app.serve.bind(app))
       .post('/newTask')
       .send(JSON.stringify(addedList))
