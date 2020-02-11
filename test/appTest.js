@@ -37,6 +37,12 @@ describe('GET request for static files', function() {
       .expect(/\/css\/home.css/)
       .expect(STATUS_CODES.OK, done);
   });
+  it('should give the all todos', done => {
+    request(app.serve.bind(app))
+      .get('/todos')
+      .expect('Content-Type', 'application/json')
+      .expect(STATUS_CODES.OK, done);
+  });
 });
 
 describe('GET request for non existing files', function() {
