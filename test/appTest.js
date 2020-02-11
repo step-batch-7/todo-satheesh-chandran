@@ -108,6 +108,13 @@ describe('GET request for static files', function() {
         .expect(/.submit-button:hover/)
         .expect(STATUS_CODES.OK, done);
     });
+
+    it('should give the writePage.js for /js/writePage.js', done => {
+      request(app.serve.bind(app))
+        .get('/js/writePage.js')
+        .expect('Content-Type', 'application/javascript')
+        .expect(STATUS_CODES.OK, done);
+    });
   });
 });
 
