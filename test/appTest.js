@@ -190,6 +190,18 @@ describe('POST', function() {
     after(() => sinon.restore());
   });
 
+  describe('request for editing todo name', function() {
+    before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+    it('should edit the name of the todo for url /editTodo', done => {
+      const body = { todoId: 1, value: 'some' };
+      request(app.serve.bind(app))
+        .post('/editTodo')
+        .send(JSON.stringify(body))
+        .expect(STATUS_CODES.OK, done);
+    });
+    after(() => sinon.restore());
+  });
+
   describe('POST for deleting tasks', function() {
     before(() => sinon.replace(fs, 'writeFileSync', () => {}));
     it('should delete tasks for url /deleteTask', done => {
