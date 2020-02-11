@@ -75,6 +75,18 @@ describe('GET request for static files', function() {
       .expect(/.submit-button:hover/)
       .expect(STATUS_CODES.OK, done);
   });
+
+  it('should give a todo for /tasks', done => {
+    const task = { status: true, name: 'one', id: '1_0' };
+    const todo = { name: 'sruthy', tasks: [task], id: 1 };
+    const expected = JSON.stringify(todo);
+    request(app.serve.bind(app))
+      .get('/tasks')
+      .set('referer', 'http://localhost:8000/editPage.html?todoId=1')
+      .expect('Content-Type', 'application/json')
+      .expect(expected)
+      .expect(STATUS_CODES.OK, done);
+  });
 });
 
 describe('GET request for non existing files', function() {
