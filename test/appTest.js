@@ -52,6 +52,14 @@ describe('GET request for static files', function() {
       .expect(/<title>edit page<\/title>/)
       .expect(STATUS_CODES.OK, done);
   });
+
+  it('should give the editPage.css for /css/editPage.css', done => {
+    request(app.serve.bind(app))
+      .get('/css/editPage.css')
+      .expect('Content-Type', 'text/css')
+      .expect(/.popUp-window {/)
+      .expect(STATUS_CODES.OK, done);
+  });
 });
 
 describe('GET request for non existing files', function() {
