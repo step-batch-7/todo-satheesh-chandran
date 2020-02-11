@@ -5,8 +5,8 @@ const { app } = require('../lib/handlers');
 
 const STATUS_CODES = { OK: 200, METHOD_NOT_FOUND: 400, REDIRECT: 301 };
 
-describe('GET request for static files', function () {
-  describe('home page', function () {
+describe('GET request for static files', function() {
+  describe('home page', function() {
     it('should give the home.html for url /', done => {
       request(app.serve.bind(app))
         .get('/')
@@ -47,7 +47,7 @@ describe('GET request for static files', function () {
     });
   });
 
-  describe('edit page', function () {
+  describe('edit page', function() {
     it('should give the editPage.html for /editPage.html?todoId=1', done => {
       request(app.serve.bind(app))
         .get('/editPage.html?todoId=1')
@@ -88,6 +88,24 @@ describe('GET request for static files', function () {
         .set('referer', 'http://localhost:8000/editPage.html?todoId=1')
         .expect('Content-Type', 'application/json')
         .expect(expected)
+        .expect(STATUS_CODES.OK, done);
+    });
+  });
+
+  describe('write page', function() {
+    it('should give the writePage.html for /writePage.html', done => {
+      request(app.serve.bind(app))
+        .get('/writePage.html')
+        .expect('Content-Type', 'text/html')
+        .expect(/<title>writePage<\/title>/)
+        .expect(STATUS_CODES.OK, done);
+    });
+
+    it('should give the writePage.css for /css/writePage.css', done => {
+      request(app.serve.bind(app))
+        .get('/css/writePage.css')
+        .expect('Content-Type', 'text/css')
+        .expect(/.submit-button:hover/)
         .expect(STATUS_CODES.OK, done);
     });
   });
