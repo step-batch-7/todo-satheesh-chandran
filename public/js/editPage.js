@@ -19,7 +19,7 @@ const getTableRowTemplate = function({ name, id, status }) {
   const attribute = status ? 'checked' : '';
   const row = `<tr id="${id}"><td>
     <input type="checkbox" ${attribute} onclick="toggleTaskStatus(${id})"/></td>
-    <td onclick="popUpEditWindow()" style="cursor: pointer;">${name}</td>
+    <td onclick="popUpEditWindow()" id="${id}" class="task">${name}</td>
     <td><button onclick="deleteTableRow('${id}')">delete</button></td></tr>`;
   return appendHtmlToDom('#list-table tbody', row);
 };
@@ -65,24 +65,30 @@ const addNewTasks = function(event) {
 
 /////////////////////////////////////////////////
 
+const editTask = function(taskId, value) {
+  const todoId = document.querySelector('h3').id;
+  const body = { todoId, taskId, value };
+  sendXHR('POST', '/editTask', appendTableRow, JSON.stringify(body));
+};
+
+const editTodo = function(todoId, value) {
+  const body = { todoId, value };
+  sendXHR('POST', '/editTodo', appendTableRow, JSON.stringify(body));
+};
+
 const replaceName = function(target, inputTag) {
   if (event.key === 'Enter' && inputTag.value.trim() !== '') {
-    const newName = inputTag.value;
-    target.innerText = newName;
-    // submitLists();
-    document.querySelector('.popUp-window').style.visibility = 'hidden';
-    document.querySelector('.lists').classList.remove('invisible');
-    document.querySelector('a input').classList.remove('invisible');
-    document.querySelector('a').style.pointerEvents = 'auto';
+    document.querySelector('#container').style['display'] = 'block';
+    document.querySelector('.popUp-window').style['display'] = 'none';
+    const edit = target.classList.contains('task') ? editTask : editTodo;
+    edit(target.id, inputTag.value);
   }
 };
 
 const popUpEditWindow = function() {
   const inputTag = document.querySelector('.popUp-window input');
-  document.querySelector('.popUp-window').style.visibility = 'visible';
-  document.querySelector('.lists').classList.add('invisible');
-  document.querySelector('a input').classList.add('invisible');
-  document.querySelector('a').style.pointerEvents = 'none';
+  document.querySelector('#container').style['display'] = 'none';
+  document.querySelector('.popUp-window').style['display'] = 'block';
   const currentTarget = event.currentTarget;
   inputTag.value = currentTarget.innerHTML;
   inputTag.onkeydown = () => replaceName(currentTarget, inputTag);

@@ -7,39 +7,39 @@
   </head>
   <body>
     <h1><span>Task </span>Manager</h1>
-    <h3 onclick="popUpEditWindow()">
-      
-    </h3>
-    <a href="home.html" style="height: 25px;">
-      <input type="submit" value="Go Back" class="submit-button"
-    /></a>
-    <br />
-    <br />
+    <div id="container">
+      <h3 onclick="popUpEditWindow()"></h3>
+      <a href="home.html" style="height: 25px;">
+        <input type="submit" value="Go Back" class="submit-button"
+      /></a>
+      <br />
+      <br />
+      <div class="lists">
+        <div class="innerBox" style="width:60%;">
+          <table id="list-table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Items</th>
+                <th>options</th>
+              </tr>
+            </thead>
+            <tbody onchange="submitLists()"></tbody>
+          </table>
+        </div>
+        <div class="innerBox" style=" width:30%; padding: 20px;">
+          <input
+            type="text"
+            placeholder=" Add New Task"
+            id="title-bar"
+            autofocus
+            onkeydown="addNewTasks(event)"
+          />
+        </div>
+      </div>
+    </div>
     <div class="popUp-window">
       <input type="text" autofocus placeholder=" Type name" id="edit-bar" />
-    </div>
-    <div class="lists">
-      <div class="innerBox" style="width:60%;">
-        <table id="list-table">
-          <thead>
-            <tr>
-              <th>Status</th>
-              <th>Items</th>
-              <th>options</th>
-            </tr>
-          </thead>
-          <tbody onchange="submitLists()"></tbody>
-        </table>
-      </div>
-      <div class="innerBox" style=" width:30%; padding: 20px;">
-        <input
-          type="text"
-          placeholder=" Add New Task"
-          id="title-bar"
-          autofocus
-          onkeydown="addNewTasks(event)"
-        />
-      </div>
     </div>
   </body>
 </html>

@@ -189,22 +189,6 @@ describe('POST for deleting tasks', function() {
   after(() => sinon.restore());
 });
 
-describe('POST of editted tasks', function() {
-  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
-  it('should save the editted list for url /editedList', done => {
-    const addedList = `{
-      "tasks":[{"status":true,"name":"new one","id":"10_1"}],
-      "id":"10","name":"satheesh chandran"
-      }`;
-
-    request(app.serve.bind(app))
-      .post('/editedList')
-      .send(addedList)
-      .expect(STATUS_CODES.OK, done);
-  });
-  after(() => sinon.restore());
-});
-
 describe('POST of deleting todo list', function() {
   before(() => sinon.replace(fs, 'writeFileSync', () => {}));
   it('should delete the requested list from memory for url /delete', done => {
