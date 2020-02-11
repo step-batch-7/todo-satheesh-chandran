@@ -67,6 +67,14 @@ describe('GET request for static files', function() {
       .expect('Content-Type', 'application/javascript')
       .expect(STATUS_CODES.OK, done);
   });
+
+  it('should give the writePage.css for /css/writePage.css', done => {
+    request(app.serve.bind(app))
+      .get('/css/writePage.css')
+      .expect('Content-Type', 'text/css')
+      .expect(/.submit-button:hover/)
+      .expect(STATUS_CODES.OK, done);
+  });
 });
 
 describe('GET request for non existing files', function() {
