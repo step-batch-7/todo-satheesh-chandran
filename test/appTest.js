@@ -37,10 +37,19 @@ describe('GET request for static files', function() {
       .expect(/\/css\/home.css/)
       .expect(STATUS_CODES.OK, done);
   });
+
   it('should give the all todos', done => {
     request(app.serve.bind(app))
       .get('/todos')
       .expect('Content-Type', 'application/json')
+      .expect(STATUS_CODES.OK, done);
+  });
+
+  it('should give the editPage.html for /editPage.html?todoId=1', done => {
+    request(app.serve.bind(app))
+      .get('/editPage.html?todoId=1')
+      .expect('Content-Type', 'text/html')
+      .expect(/<title>edit page<\/title>/)
       .expect(STATUS_CODES.OK, done);
   });
 });
