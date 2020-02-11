@@ -65,7 +65,7 @@ const submitLists = function() {
   const modifiedLists = {
     tasks: modifiedTasks,
     id: document.querySelector('body h3').getAttribute('id'),
-    name: document.querySelector('h3 span').innerText
+    name: document.querySelector('h3').innerText
   };
   sendModifiedList('/editedList', JSON.stringify(modifiedLists));
 };
