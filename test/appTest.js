@@ -80,7 +80,7 @@ describe('GET request for static files', function() {
     });
 
     it('should give a todo for /tasks', done => {
-      const task = { status: true, name: 'one', id: '1_0' };
+      const task = { id: 0, name: 'one', status: true };
       const todo = { name: 'sruthy', tasks: [task], id: 1 };
       const expected = JSON.stringify(todo);
       request(app.serve.bind(app))
