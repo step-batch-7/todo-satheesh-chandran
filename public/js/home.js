@@ -12,7 +12,7 @@ const getListRows = function(todos) {
     `<tr><td><a href="./editPage.html?todoId=${id}">${name}</a></td>
     <td id="${id}"><button onclick="deleteList()">delete</button></td></tr>`;
 
-  return todos.todoLists.map(toTodoRow).join('\n');
+  return todos.map(toTodoRow).join('\n');
 };
 
 const getTaskRows = function(todos) {
@@ -22,7 +22,7 @@ const getTaskRows = function(todos) {
     <td><a href="./editPage.html?todoId=${id}">${todoName}</a></td></tr>`;
     return tasks.map(toRow).join('\n');
   };
-  const taskRows = todos.todoLists.map(toTaskRow);
+  const taskRows = todos.map(toTaskRow);
   return taskRows;
 };
 
