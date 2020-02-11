@@ -1,6 +1,7 @@
 const deleteTableRow = function(id) {
   const selectedRow = document.getElementById(id);
   document.querySelector('#list-table tbody').removeChild(selectedRow);
+  submitLists();
 };
 
 const requestForElement = function(url, callback) {
@@ -13,22 +14,21 @@ const requestForElement = function(url, callback) {
 };
 
 const getTableRowTemplate = function({ name, id, status }) {
-  const toTdElements = () => `<td><input type="checkbox"/></td>
+  const attribute = status ? 'checked' : '';
+  const toTdElements = () => `<td><input type="checkbox" ${attribute}/></td>
     <td onclick="popUpEditWindow()" style="cursor: pointer;">${name}</td>
     <td><button onclick="deleteTableRow('${id}')">delete</button></td>`;
 
   const tableRow = document.createElement('tr');
   tableRow.setAttribute('id', id);
   tableRow.innerHTML = toTdElements();
-  tableRow.querySelector('td input').checked = status;
   document.querySelector('#list-table tbody').appendChild(tableRow);
 };
 
 const appendTableRow = function(todoList) {
-  document.querySelector('body h3 span').innerText = todoList.name;
-  document.querySelector('body h3').setAttribute('id', todoList.id);
-  const tasks = todoList.tasks;
-  tasks.forEach(getTableRowTemplate);
+  document.querySelector('body h3').innerText = todoList.name;
+  document.querySelector('body h3').id = todoList.id;
+  todoList.tasks.forEach(getTableRowTemplate);
 };
 
 const main = function() {
@@ -93,7 +93,7 @@ const addNewTasks = function(event) {
   const inputTag = document.querySelector('#title-bar');
   if (event.key === 'Enter' && inputTag.value.trim() !== '') {
     const taskName = inputTag.value;
-    document.querySelector('#title-bar').value = '';
+    inputTag.value = '';
     const lastTaskId = getLastRableRowId();
     const addedTask = { taskName: taskName, lastTaskId: lastTaskId };
     sendAddedTask('newTask', JSON.stringify(addedTask));
