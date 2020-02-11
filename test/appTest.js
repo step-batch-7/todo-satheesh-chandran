@@ -14,11 +14,19 @@ describe('GET request for static files', function() {
       .expect(STATUS_CODES.OK, done);
   });
 
-  it('should give the home.css url /home.css', done => {
+  it('should give the home.css url /css/home.css', done => {
     request(app.serve.bind(app))
       .get('/css/home.css')
       .expect('Content-Type', 'text/css')
       .expect(/body {/)
+      .expect(STATUS_CODES.OK, done);
+  });
+
+  it('should give the home.js url /js/home.js', done => {
+    request(app.serve.bind(app))
+      .get('/js/home.js')
+      .expect('Content-Type', 'application/javascript')
+      .expect(/updateTodosOnPage/)
       .expect(STATUS_CODES.OK, done);
   });
 
