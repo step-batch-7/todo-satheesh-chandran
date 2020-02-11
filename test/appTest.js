@@ -147,7 +147,7 @@ describe('POST', function() {
       name: 'satheesh'
     };
     request(app.serve.bind(app))
-      .post('/list')
+      .post('/addNewTodo')
       .send(JSON.stringify(todoList))
       .expect(STATUS_CODES.OK, done);
   });

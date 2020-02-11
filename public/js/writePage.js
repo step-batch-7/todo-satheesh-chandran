@@ -54,5 +54,5 @@ const submitLists = function() {
     tasks: tasks,
     name: title
   };
-  sendAddedLists('/list', JSON.stringify(toDoList));
+  sendAddedLists('/addNewTodo', JSON.stringify(toDoList));
 };
