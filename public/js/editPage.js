@@ -1,8 +1,7 @@
 const deleteTableRow = function(taskId) {
   const todoId = document.querySelector('h3').id;
-  const deletedTask = { taskId, todoId };
-  const body = JSON.stringify(deletedTask);
-  sendXHR('POST', 'deleteTask', appendTableRow, body);
+  const body = { taskId, todoId };
+  sendXHR('POST', 'deleteTask', appendTableRow, JSON.stringify(body));
 };
 
 const sendXHR = function(method, url, callback, message = '') {

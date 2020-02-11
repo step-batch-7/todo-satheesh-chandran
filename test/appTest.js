@@ -154,6 +154,18 @@ describe('POST request for saving the newly added todo lists', function() {
   after(() => sinon.restore());
 });
 
+describe('POST for deleting tasks', function() {
+  before(() => sinon.replace(fs, 'writeFileSync', () => {}));
+  it('should delete tasks for url /deleteTask', done => {
+    const deletedTask = { todoId: '1', taskId: '1' };
+    request(app.serve.bind(app))
+      .post('/deleteTask')
+      .send(JSON.stringify(deletedTask))
+      .expect(STATUS_CODES.OK, done);
+  });
+  after(() => sinon.restore());
+});
+
 describe('POST for newTask', function() {
   before(() => sinon.replace(fs, 'writeFileSync', () => {}));
   it('should save the new task given with url /newTask', done => {
