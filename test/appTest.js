@@ -60,6 +60,13 @@ describe('GET request for static files', function() {
       .expect(/.popUp-window {/)
       .expect(STATUS_CODES.OK, done);
   });
+
+  it('should give the editPage.js for /js/editPage.js', done => {
+    request(app.serve.bind(app))
+      .get('/js/editPage.js')
+      .expect('Content-Type', 'application/javascript')
+      .expect(STATUS_CODES.OK, done);
+  });
 });
 
 describe('GET request for non existing files', function() {
