@@ -5,87 +5,91 @@ const { app } = require('../lib/handlers');
 
 const STATUS_CODES = { OK: 200, METHOD_NOT_FOUND: 400, REDIRECT: 301 };
 
-describe('GET request for static files', function() {
-  it('should give the home.html for url /', done => {
-    request(app.serve.bind(app))
-      .get('/')
-      .expect('Content-Type', 'text/html')
-      .expect(/\/css\/home.css/)
-      .expect(STATUS_CODES.OK, done);
+describe('GET request for static files', function () {
+  describe('home page', function () {
+    it('should give the home.html for url /', done => {
+      request(app.serve.bind(app))
+        .get('/')
+        .expect('Content-Type', 'text/html')
+        .expect(/\/css\/home.css/)
+        .expect(STATUS_CODES.OK, done);
+    });
+
+    it('should give the home.css url /css/home.css', done => {
+      request(app.serve.bind(app))
+        .get('/css/home.css')
+        .expect('Content-Type', 'text/css')
+        .expect(/body {/)
+        .expect(STATUS_CODES.OK, done);
+    });
+
+    it('should give the home.js url /js/home.js', done => {
+      request(app.serve.bind(app))
+        .get('/js/home.js')
+        .expect('Content-Type', 'application/javascript')
+        .expect(/updateTodosOnPage/)
+        .expect(STATUS_CODES.OK, done);
+    });
+
+    it('should give the home page with url /home.html', done => {
+      request(app.serve.bind(app))
+        .get('/home.html')
+        .expect('Content-Type', 'text/html')
+        .expect(/\/css\/home.css/)
+        .expect(STATUS_CODES.OK, done);
+    });
+
+    it('should give the all todos', done => {
+      request(app.serve.bind(app))
+        .get('/todos')
+        .expect('Content-Type', 'application/json')
+        .expect(STATUS_CODES.OK, done);
+    });
   });
 
-  it('should give the home.css url /css/home.css', done => {
-    request(app.serve.bind(app))
-      .get('/css/home.css')
-      .expect('Content-Type', 'text/css')
-      .expect(/body {/)
-      .expect(STATUS_CODES.OK, done);
-  });
+  describe('edit page', function () {
+    it('should give the editPage.html for /editPage.html?todoId=1', done => {
+      request(app.serve.bind(app))
+        .get('/editPage.html?todoId=1')
+        .expect('Content-Type', 'text/html')
+        .expect(/<title>edit page<\/title>/)
+        .expect(STATUS_CODES.OK, done);
+    });
 
-  it('should give the home.js url /js/home.js', done => {
-    request(app.serve.bind(app))
-      .get('/js/home.js')
-      .expect('Content-Type', 'application/javascript')
-      .expect(/updateTodosOnPage/)
-      .expect(STATUS_CODES.OK, done);
-  });
+    it('should give the editPage.css for /css/editPage.css', done => {
+      request(app.serve.bind(app))
+        .get('/css/editPage.css')
+        .expect('Content-Type', 'text/css')
+        .expect(/.popUp-window {/)
+        .expect(STATUS_CODES.OK, done);
+    });
 
-  it('should give the home page with url /home.html', done => {
-    request(app.serve.bind(app))
-      .get('/home.html')
-      .expect('Content-Type', 'text/html')
-      .expect(/\/css\/home.css/)
-      .expect(STATUS_CODES.OK, done);
-  });
+    it('should give the editPage.js for /js/editPage.js', done => {
+      request(app.serve.bind(app))
+        .get('/js/editPage.js')
+        .expect('Content-Type', 'application/javascript')
+        .expect(STATUS_CODES.OK, done);
+    });
 
-  it('should give the all todos', done => {
-    request(app.serve.bind(app))
-      .get('/todos')
-      .expect('Content-Type', 'application/json')
-      .expect(STATUS_CODES.OK, done);
-  });
+    it('should give the writePage.css for /css/writePage.css', done => {
+      request(app.serve.bind(app))
+        .get('/css/writePage.css')
+        .expect('Content-Type', 'text/css')
+        .expect(/.submit-button:hover/)
+        .expect(STATUS_CODES.OK, done);
+    });
 
-  it('should give the editPage.html for /editPage.html?todoId=1', done => {
-    request(app.serve.bind(app))
-      .get('/editPage.html?todoId=1')
-      .expect('Content-Type', 'text/html')
-      .expect(/<title>edit page<\/title>/)
-      .expect(STATUS_CODES.OK, done);
-  });
-
-  it('should give the editPage.css for /css/editPage.css', done => {
-    request(app.serve.bind(app))
-      .get('/css/editPage.css')
-      .expect('Content-Type', 'text/css')
-      .expect(/.popUp-window {/)
-      .expect(STATUS_CODES.OK, done);
-  });
-
-  it('should give the editPage.js for /js/editPage.js', done => {
-    request(app.serve.bind(app))
-      .get('/js/editPage.js')
-      .expect('Content-Type', 'application/javascript')
-      .expect(STATUS_CODES.OK, done);
-  });
-
-  it('should give the writePage.css for /css/writePage.css', done => {
-    request(app.serve.bind(app))
-      .get('/css/writePage.css')
-      .expect('Content-Type', 'text/css')
-      .expect(/.submit-button:hover/)
-      .expect(STATUS_CODES.OK, done);
-  });
-
-  it('should give a todo for /tasks', done => {
-    const task = { status: true, name: 'one', id: '1_0' };
-    const todo = { name: 'sruthy', tasks: [task], id: 1 };
-    const expected = JSON.stringify(todo);
-    request(app.serve.bind(app))
-      .get('/tasks')
-      .set('referer', 'http://localhost:8000/editPage.html?todoId=1')
-      .expect('Content-Type', 'application/json')
-      .expect(expected)
-      .expect(STATUS_CODES.OK, done);
+    it('should give a todo for /tasks', done => {
+      const task = { status: true, name: 'one', id: '1_0' };
+      const todo = { name: 'sruthy', tasks: [task], id: 1 };
+      const expected = JSON.stringify(todo);
+      request(app.serve.bind(app))
+        .get('/tasks')
+        .set('referer', 'http://localhost:8000/editPage.html?todoId=1')
+        .expect('Content-Type', 'application/json')
+        .expect(expected)
+        .expect(STATUS_CODES.OK, done);
+    });
   });
 });
 
