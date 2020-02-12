@@ -31,14 +31,6 @@ describe('GET', function() {
         .expect(STATUS_CODES.OK, done);
     });
 
-    it('should give the home page with url /home.html', done => {
-      request(app.serve.bind(app))
-        .get('/home.html')
-        .expect('Content-Type', 'text/html')
-        .expect(/\/css\/home.css/)
-        .expect(STATUS_CODES.OK, done);
-    });
-
     it('should give the all todos', done => {
       request(app.serve.bind(app))
         .get('/todos')
