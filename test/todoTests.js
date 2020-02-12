@@ -59,4 +59,19 @@ describe('Todo', function() {
       assert.equal(todo.generateId(), 1);
     });
   });
+
+  describe('editTask', function() {
+    it('should return true if the task name is edited', function() {
+      const todo = Todo.create({ id: 1, tasks: [], name: 'somename' });
+      todo.addTask('new');
+      assert.isTrue(todo.editTask(0, 'hii'));
+      const expected = { id: 0, name: 'hii', status: false };
+      assert.deepStrictEqual(todo.findTask(0), expected);
+    });
+
+    it('should return false if the task is not present to edit', function() {
+      const todo = Todo.create({ id: 1, tasks: [], name: 'somename' });
+      assert.isFalse(todo.editTask(10, 'hii'));
+    });
+  });
 });
