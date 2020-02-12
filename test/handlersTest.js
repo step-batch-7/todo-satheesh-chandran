@@ -155,6 +155,7 @@ describe('POST', function() {
     request(app.serve.bind(app))
       .post('/delete')
       .send('1')
+      .expect('Content-Type', 'application/json')
       .expect(STATUS_CODES.OK, done);
   });
 });

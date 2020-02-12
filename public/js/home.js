@@ -1,11 +1,4 @@
 /* eslint-disable no-extra-parens */
-// const appendChildHTML = (selector, html) => {
-//   const temp = document.createElement('div');
-//   temp.innerHTML = html;
-//   document.querySelector(selector).appendChild(temp.firstChild);
-// };
-
-const sendIdToServer = id => sendPostRequest('tasks', id);
 
 const generateTodos = function(html, { id, name }) {
   const todo = `<tr><td><a href="./editPage.html?todoId=${id}">${name}</a></td>
@@ -23,19 +16,10 @@ const generateTodosWithTasks = function(html, { id, name, tasks }) {
 };
 
 const updateTodosOnPage = function(todos) {
-  const trsHTML = todos.reduce(generateTodos, '');
-  const listHTML = todos.reduce(generateTodosWithTasks, '');
-  document.querySelector('#list-table tbody').innerHTML = trsHTML;
-  document.querySelector('.list-table tbody').innerHTML = listHTML;
-};
-
-const getJSONFromServer = (url, callback) => {
-  const req = new XMLHttpRequest();
-  req.onload = function() {
-    callback(JSON.parse(this.response));
-  };
-  req.open('GET', url);
-  req.send();
+  const todoHTML = todos.reduce(generateTodos, '');
+  const taskHTML = todos.reduce(generateTodosWithTasks, '');
+  document.querySelector('#list-table tbody').innerHTML = todoHTML;
+  document.querySelector('.list-table tbody').innerHTML = taskHTML;
 };
 
 const sendXHR = function(method, url, callback, message = '') {
@@ -49,18 +33,10 @@ const sendXHR = function(method, url, callback, message = '') {
   req.send(message);
 };
 
-const sendPostRequest = function(url, content) {
-  const req = new XMLHttpRequest();
-  req.open('POST', url);
-  req.send(content);
-};
-
 const deleteList = function() {
-  const target = event.currentTarget;
-  const parent = target.parentElement;
-  const id = parent.getAttribute('id');
-  sendPostRequest('/delete', id);
-  getJSONFromServer('todos', updateTodosOnPage);
+  const [, parent] = event.path;
+  const id = parent.id;
+  sendXHR('POST', '/delete', updateTodosOnPage, `{ "id": "${id}" }`);
 };
 
 const main = () => {
