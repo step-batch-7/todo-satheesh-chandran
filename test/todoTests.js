@@ -31,4 +31,19 @@ describe('Todo', function() {
       assert.isFalse(todo.deleteTask(0));
     });
   });
+
+  describe('findTask', function() {
+    it('should give the task that has id 0', function() {
+      const task = { id: 0, name: 'new', status: false };
+      const todo = Todo.create({ id: 1, tasks: [], name: 'somename' });
+      todo.addTask('new');
+      assert.deepStrictEqual(todo.findTask(0), task);
+    });
+
+    it('should give undefined for the task that is not existing', function() {
+      const todo = Todo.create({ id: 1, tasks: [], name: 'somename' });
+      todo.addTask('new');
+      assert.isUndefined(todo.findTask(10));
+    });
+  });
 });
