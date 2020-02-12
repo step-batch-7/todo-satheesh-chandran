@@ -46,4 +46,17 @@ describe('Todo', function() {
       assert.isUndefined(todo.findTask(10));
     });
   });
+
+  describe('generateId', function() {
+    it('should return zero if the tasks are empty ', function() {
+      const todo = Todo.create({ id: 1, tasks: [], name: 'somename' });
+      assert.equal(todo.generateId(), 0);
+    });
+
+    it('should return 1 if the latest task has id 0', function() {
+      const todo = Todo.create({ id: 1, tasks: [], name: 'somename' });
+      todo.addTask('new');
+      assert.equal(todo.generateId(), 1);
+    });
+  });
 });
