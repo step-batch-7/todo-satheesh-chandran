@@ -79,12 +79,12 @@ describe('GET', function() {
         .expect(STATUS_CODES.OK, done);
     });
 
-    it('should give a todo for /tasks', done => {
+    it('should give a todo for /todo', done => {
       const task = { id: 0, name: 'one', status: true };
       const todo = { name: 'sruthy', tasks: [task], id: 1 };
       const expected = JSON.stringify(todo);
       request(app.serve.bind(app))
-        .get('/tasks')
+        .get('/todo')
         .set('referer', 'http://localhost:8000/editPage.html?todoId=1')
         .expect('Content-Type', 'application/json')
         .expect(expected)
@@ -122,9 +122,8 @@ describe('GET request for non existing files', function() {
   it('should return a 404 message ', done => {
     request(app.serve.bind(app))
       .get('/ajhsdfnbjhbk')
-      .expect('Content-Type', 'text/html')
-      .expect(/404 File Not Found/)
-      .expect(STATUS_CODES.OK, done);
+      .expect('File Not Found')
+      .expect(404, done);
   });
 });
 
@@ -132,7 +131,6 @@ describe('Not Allowed Method', () => {
   it('should give 400 status code when the method is not allowed', done => {
     request(app.serve.bind(app))
       .put('/home.html')
-      .expect('Content-Type', 'text/plain')
       .expect('Method Not Allowed')
       .expect(405, done);
   });

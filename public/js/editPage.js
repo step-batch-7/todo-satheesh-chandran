@@ -39,7 +39,7 @@ const appendTableRow = function(todoList) {
 };
 
 const main = function() {
-  sendXHR('GET', '/tasks', appendTableRow);
+  sendXHR('GET', '/todo', appendTableRow);
 };
 
 window.onload = main;
