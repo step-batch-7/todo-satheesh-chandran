@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "export DATA_STORE=$(pwd)/test/resource/todo.json; nyc mocha",
-    "lint": "eslint *.js public/js/*.js lib/*.js",
+    "lint": "eslint *.js public/js/*.js lib/*.js test/*.js",
     "alltests": "npm test && npm run lint",
     "start": "node server.js"
   },
