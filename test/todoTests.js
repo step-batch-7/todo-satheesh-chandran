@@ -74,4 +74,22 @@ describe('Todo', function() {
       assert.isFalse(todo.editTask(10, 'hii'));
     });
   });
+
+  describe('changeStatus', function() {
+    it('should give true for the task status is changed', function() {
+      const todo = Todo.create({ id: 1, tasks: [], name: 'somename' });
+      todo.addTask('new');
+      assert.isTrue(todo.changeStatus(0));
+      const expected = { id: 0, name: 'new', status: true };
+      assert.deepStrictEqual(todo.findTask(0), expected);
+      assert.isTrue(todo.changeStatus(0));
+      expected.status = false;
+      assert.deepStrictEqual(todo.findTask(0), expected);
+    });
+
+    it('should give false if task is not exists to change status', function() {
+      const todo = Todo.create({ id: 1, tasks: [], name: 'somename' });
+      assert.isFalse(todo.changeStatus(10));
+    });
+  });
 });
