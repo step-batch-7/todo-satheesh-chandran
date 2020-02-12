@@ -129,11 +129,6 @@ a {
   pointer-events: none;
 }
 
-.hide {
-  visibility: hidden;
-  position: absolute;
-}
-
 .innerBox {
   height: inherit;
   width: 60%;
@@ -192,4 +187,8 @@ a {
 
 ::placeholder {
   color: #4caf50;
+}
+
+.hide {
+  display: none;
 }

@@ -1,5 +1,3 @@
-/* eslint-disable no-extra-parens */
-
 const generateTodos = function(html, { id, name }) {
   const todo = `<tr><td><a href="./editPage.html?todoId=${id}">${name}</a></td>
   <td id="${id}"><button onclick="deleteList()">delete</button></td></tr>`;
@@ -66,12 +64,12 @@ const search = function() {
 const showMatched = function(value, rows) {
   const regEx = new RegExp(`${value}`, 'i');
   const matched = rows.filter(row => row.textContent.match(regEx));
-  matched.forEach(row => (row.style.display = ''));
+  matched.forEach(row => row.classList.remove('hide'));
 };
 
 const searchByTodo = function(text) {
   const rows = Array.from(document.querySelector('tbody').children);
-  rows.forEach(row => (row.style.display = 'none'));
+  rows.forEach(row => row.classList.add('hide'));
   showMatched(event.target.value, rows);
 };
 
@@ -87,6 +85,6 @@ const toggleHideTable = function(text) {
 const searchByTask = function(text) {
   const rows = Array.from(document.querySelector('.list-table tbody').children);
   toggleHideTable(text);
-  rows.forEach(row => (row.style.display = 'none'));
+  rows.forEach(row => row.classList.add('hide'));
   showMatched(text, rows);
 };
