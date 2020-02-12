@@ -65,14 +65,6 @@ describe('GET', function() {
         .expect(STATUS_CODES.OK, done);
     });
 
-    it('should give the writePage.css for /css/writePage.css', done => {
-      request(app.serve.bind(app))
-        .get('/css/writePage.css')
-        .expect('Content-Type', 'text/css')
-        .expect(/.submit-button:hover/)
-        .expect(STATUS_CODES.OK, done);
-    });
-
     it('should give a todo for /todo', done => {
       const task = { id: 0, name: 'one', status: true };
       const todo = { name: 'sruthy', tasks: [task], id: 1 };
@@ -82,31 +74,6 @@ describe('GET', function() {
         .set('referer', 'http://localhost:8000/editPage.html?todoId=1')
         .expect('Content-Type', 'application/json')
         .expect(expected)
-        .expect(STATUS_CODES.OK, done);
-    });
-  });
-
-  describe('write page', function() {
-    it('should give the writePage.html for /writePage.html', done => {
-      request(app.serve.bind(app))
-        .get('/writePage.html')
-        .expect('Content-Type', 'text/html')
-        .expect(/<title>writePage<\/title>/)
-        .expect(STATUS_CODES.OK, done);
-    });
-
-    it('should give the writePage.css for /css/writePage.css', done => {
-      request(app.serve.bind(app))
-        .get('/css/writePage.css')
-        .expect('Content-Type', 'text/css')
-        .expect(/.submit-button:hover/)
-        .expect(STATUS_CODES.OK, done);
-    });
-
-    it('should give the writePage.js for /js/writePage.js', done => {
-      request(app.serve.bind(app))
-        .get('/js/writePage.js')
-        .expect('Content-Type', 'application/javascript')
         .expect(STATUS_CODES.OK, done);
     });
   });
