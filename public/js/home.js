@@ -7,30 +7,26 @@
 
 const sendIdToServer = id => sendPostRequest('tasks', id);
 
-const getListRows = function(todos) {
-  const toTodoRow = ({ id, name }) =>
-    `<tr><td><a href="./editPage.html?todoId=${id}">${name}</a></td>
-    <td id="${id}"><button onclick="deleteList()">delete</button></td></tr>`;
-
-  return todos.map(toTodoRow).join('\n');
+const generateTodos = function(html, { id, name }) {
+  const todo = `<tr><td><a href="./editPage.html?todoId=${id}">${name}</a></td>
+  <td id="${id}"><button onclick="deleteList()">delete</button></td></tr>`;
+  return html + todo;
 };
 
-const getTaskRows = function(todos) {
-  const toTaskRow = ({ id, name, tasks }) => {
-    const todoName = name;
-    const toRow = ({ name }) => `<tr><td>${name}</td>
-    <td><a href="./editPage.html?todoId=${id}">${todoName}</a></td></tr>`;
-    return tasks.map(toRow).join('\n');
+const generateTodosWithTasks = function(html, { id, name, tasks }) {
+  const toTaskHtml = function(html, task) {
+    const taskHtml = `<tr><td>${task.name}</td>
+      <td><a href="./editPage.html?todoId=${id}">${name}</a></td></tr>`;
+    return html + taskHtml;
   };
-  const taskRows = todos.map(toTaskRow);
-  return taskRows;
+  return html + tasks.reduce(toTaskHtml, '');
 };
 
 const updateTodosOnPage = function(todos) {
-  const trsHTML = getListRows(todos);
-  const listHTML = getTaskRows(todos);
+  const trsHTML = todos.reduce(generateTodos, '');
+  const listHTML = todos.reduce(generateTodosWithTasks, '');
   document.querySelector('#list-table tbody').innerHTML = trsHTML;
-  document.querySelector('.list-table tbody').innerHTML = listHTML.join('\n');
+  document.querySelector('.list-table tbody').innerHTML = listHTML;
 };
 
 const getJSONFromServer = (url, callback) => {
@@ -68,7 +64,7 @@ const deleteList = function() {
 };
 
 const main = () => {
-  getJSONFromServer('todos', updateTodosOnPage);
+  sendXHR('GET', '/todos', updateTodosOnPage);
 };
 
 window.onload = main;
