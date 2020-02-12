@@ -66,7 +66,7 @@ describe('GET', function() {
     });
 
     it('should give a todo for /todo', done => {
-      const task = { id: 0, name: 'one', status: true };
+      const task = { id: 1, name: 'one', status: true };
       const todo = { name: 'sruthy', tasks: [task], id: 1 };
       const expected = JSON.stringify(todo);
       request(app.serve.bind(app))
