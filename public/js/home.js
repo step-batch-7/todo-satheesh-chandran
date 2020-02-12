@@ -39,6 +39,15 @@ const deleteList = function() {
   sendXHR('POST', '/delete', updateTodosOnPage, `{ "id": "${id}" }`);
 };
 
+const addNewTodo = function() {
+  const target = event.target;
+  if (event.key === 'Enter' && target.value.trim() !== '') {
+    const body = JSON.stringify({ name: target.value });
+    sendXHR('POST', 'addNewTodo', updateTodosOnPage, body);
+    target.value = '';
+  }
+};
+
 const main = () => {
   sendXHR('GET', '/todos', updateTodosOnPage);
 };
@@ -47,56 +56,37 @@ window.onload = main;
 
 /////////////////////////////////////////////////
 
-const toggleSearchBar = function() {
-  if (document.querySelector('#check').checked) {
-    document.querySelector('#todo').classList.add('invisible');
-    return document.querySelector('#task').classList.remove('invisible');
-  }
-  document.querySelector('#todo').classList.remove('invisible');
-  document.querySelector('#task').classList.add('invisible');
-};
-
-const showMatched = function(searchValue, rows) {
-  const matchValue = row => {
-    if (row.textContent.match(searchValue)) {
-      row.style.display = '';
-    }
-  };
-  rows.forEach(matchValue);
-};
-
-const filterMatchedList = function() {
-  const searchValue = event.target.value;
-  const tableRows = Array.from(document.querySelector('tbody').children);
-
-  if (searchValue !== '') {
-    tableRows.forEach(row => (row.style.display = 'none'));
-    return showMatched(searchValue, tableRows);
-  }
-  tableRows.forEach(row => (row.style.display = ''));
-};
-
-const filterMatchedTask = function() {
-  const searchValue = event.target.value;
-  const tableRows = Array.from(
-    document.querySelector('.list-table tbody').children
-  );
-  if (searchValue !== '') {
-    document.querySelector('.innerBox').classList.add('hide');
-    document.querySelector('.hiddenBox').classList.remove('hide');
-    tableRows.forEach(row => (row.style.display = 'none'));
-    return showMatched(searchValue, tableRows);
-  }
-  tableRows.forEach(row => (row.style.display = ''));
-  document.querySelector('.innerBox').classList.remove('hide');
-  document.querySelector('.hiddenBox').classList.add('hide');
-};
-
-const addNewTodo = function() {
+const search = function() {
   const target = event.target;
-  if (event.key === 'Enter' && target.value.trim() !== '') {
-    const body = JSON.stringify({ name: target.value });
-    sendXHR('POST', 'addNewTodo', updateTodosOnPage, body);
-    target.value = '';
+  const selector = document.querySelector('#selector');
+  const searcher = selector.value === 'title' ? searchByTodo : searchByTask;
+  searcher(target.value);
+};
+
+const showMatched = function(value, rows) {
+  const regEx = new RegExp(`${value}`, 'i');
+  const matched = rows.filter(row => row.textContent.match(regEx));
+  matched.forEach(row => (row.style.display = ''));
+};
+
+const searchByTodo = function(text) {
+  const rows = Array.from(document.querySelector('tbody').children);
+  rows.forEach(row => (row.style.display = 'none'));
+  showMatched(event.target.value, rows);
+};
+
+const toggleHideTable = function(text) {
+  if (text === '') {
+    document.querySelector('.innerBox').classList.remove('hide');
+    return document.querySelector('.hiddenBox').classList.add('hide');
   }
+  document.querySelector('.innerBox').classList.add('hide');
+  document.querySelector('.hiddenBox').classList.remove('hide');
+};
+
+const searchByTask = function(text) {
+  const rows = Array.from(document.querySelector('.list-table tbody').children);
+  toggleHideTable(text);
+  rows.forEach(row => (row.style.display = 'none'));
+  showMatched(text, rows);
 };

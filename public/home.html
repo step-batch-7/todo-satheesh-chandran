@@ -11,26 +11,16 @@
           <input
             type="text"
             class="search-bar"
-            placeholder="Search By List Name"
-            oninput="filterMatchedList()"
-          />
-        </div>
-        <div id="task" class="invisible">
-          <input
-            type="text"
-            class="search-bar"
-            placeholder="Search By Task Name"
-            oninput="filterMatchedTask()"
+            placeholder="Search By List"
+            oninput="search()"
           />
         </div>
       </div>
       <div style="padding: 20px;">
-        <input type="checkbox" id="check" onclick="toggleSearchBar()" />
-        <label for="check">
-          <div>
-            <div></div>
-          </div>
-        </label>
+        <select id="selector">
+          <option value="title">Title</option>
+          <option value="task">Task</option>
+        </select>
       </div>
     </div>
     <h1><span>Task </span>Manager</h1>
