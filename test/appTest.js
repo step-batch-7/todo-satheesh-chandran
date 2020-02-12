@@ -48,6 +48,8 @@ describe('GET', function() {
   });
 
   describe('edit page', function() {
+    beforeEach(() => sinon.replace(fs, 'writeFileSync', () => {}));
+    afterEach(() => sinon.restore());
     it('should give the editPage.html for /editPage.html?todoId=1', done => {
       request(app.serve.bind(app))
         .get('/editPage.html?todoId=1')
