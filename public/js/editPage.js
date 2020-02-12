@@ -1,9 +1,3 @@
-const deleteTableRow = function(taskId) {
-  const todoId = document.querySelector('h3').id;
-  const body = { taskId, todoId };
-  sendXHR('POST', 'deleteTask', appendTableRow, JSON.stringify(body));
-};
-
 const sendXHR = function(method, url, callback, message = '') {
   const req = new XMLHttpRequest();
   req.onload = function() {
@@ -52,14 +46,20 @@ const toggleTaskStatus = function(taskId) {
 
 /////////////////////////////////////////////////
 
+const deleteTableRow = function(taskId) {
+  const todoId = document.querySelector('h3').id;
+  const body = { taskId, todoId };
+  sendXHR('POST', 'deleteTask', appendTableRow, JSON.stringify(body));
+};
+
 const addNewTasks = function(event) {
-  const inputTag = document.querySelector('#title-bar');
+  const inputTag = event.target;
   if (event.key === 'Enter' && inputTag.value.trim() !== '') {
     const taskName = inputTag.value;
-    inputTag.value = '';
     const todoId = document.querySelector('h3').id;
     const body = JSON.stringify({ taskName, todoId });
     sendXHR('POST', 'newTask', appendTableRow, body);
+    inputTag.value = '';
   }
 };
 
