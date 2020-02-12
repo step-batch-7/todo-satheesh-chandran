@@ -177,3 +177,19 @@ a {
   background-color: #4caf50;
   color: white;
 }
+
+#todo-adder {
+  height: 28px;
+  width: 300px;
+  outline: none;
+  margin: 0 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #4caf50;
+  font-size: large;
+  font-style: italic;
+}
+
+::placeholder {
+  color: #4caf50;
+}

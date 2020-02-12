@@ -42,6 +42,17 @@ const getJSONFromServer = (url, callback) => {
   req.send();
 };
 
+const sendXHR = function(method, url, callback, message = '') {
+  const req = new XMLHttpRequest();
+  req.onload = function() {
+    if (this.status === 200) {
+      callback(JSON.parse(this.responseText));
+    }
+  };
+  req.open(method, url);
+  req.send(message);
+};
+
 const sendPostRequest = function(url, content) {
   const req = new XMLHttpRequest();
   req.open('POST', url);
@@ -107,4 +118,13 @@ const filterMatchedTask = function() {
   tableRows.forEach(row => (row.style.display = ''));
   document.querySelector('.innerBox').classList.remove('hide');
   document.querySelector('.hiddenBox').classList.add('hide');
+};
+
+const addNewTodo = function() {
+  const target = event.target;
+  if (event.key === 'Enter' && target.value.trim() !== '') {
+    const body = JSON.stringify({ name: target.value });
+    sendXHR('POST', 'addNewTodo', updateTodosOnPage, body);
+    target.value = '';
+  }
 };
