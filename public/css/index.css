@@ -13,39 +13,43 @@ h1 {
 
 h3 {
   color: #4caf50;
+  font-size: 23px;
+  margin-bottom: 45px;
 }
 
 span {
   color: #4caf50;
 }
 
-.platform {
-  justify-content: space-evenly;
+.login-window,
+.signup-window {
+  align-items: center;
   display: flex;
-  height: 500px;
-  width: 100%;
-  /* border: 1px solid; */
-  flex-wrap: wrap;
-}
-
-#login-window,
-#signup-window {
-  height: inherit;
-  width: 400px;
-  /* border-radius: 10px; */
-  /* border: 1px solid #4caf50; */
-  background-color: rgb(240, 240, 240);
-  box-shadow: 2px 2px 4px gray;
-}
-
-#signup-window {
+  flex-direction: column;
+  height: 450px;
   position: absolute;
-  /* visibility: hidden; */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -70%);
+  width: 400px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 2px 0px 10px 0px #a0a0a07a;
+}
+
+.info {
+  margin-top: 25px;
+  color: #252323e0;
+}
+
+form {
+  padding-bottom: 10px;
+  margin: 0px;
+  border-bottom: 1px solid #ddd;
 }
 
 .invisible {
-  visibility: hidden;
-  pointer-events: none;
+  display: none;
 }
 
 ::placeholder {
@@ -56,7 +60,7 @@ span {
   height: 28px;
   width: 300px;
   outline: none;
-  margin: 0 10px;
+  /* margin: 0 10px; */
   background: transparent;
   border: none;
   border-bottom: 1px solid #4caf50;
@@ -71,6 +75,11 @@ button {
   height: 25px;
 }
 
+.button {
+  border-radius: 3px;
+  outline: none;
+}
+
 button:hover {
   cursor: pointer;
 }
@@ -80,4 +89,9 @@ button:hover {
   color: white;
   height: 25px;
   width: 67px;
+  margin-top: 20px;
+}
+
+input {
+  margin-bottom: 10px;
 }
