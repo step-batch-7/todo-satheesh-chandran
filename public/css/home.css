@@ -192,3 +192,11 @@ a {
 .hide {
   display: none;
 }
+
+#selector {
+  color: #4caf50;
+  background: transparent;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  outline: none;
+}
