@@ -164,7 +164,7 @@ describe('TodoRecords', function() {
     });
   });
 
-  describe('addTodoTsk', function() {
+  describe('addTodoTask', function() {
     it('should give true for adding new task for existing todo', function() {
       const todoRecords = TodoRecords.loadTodo([]);
       todoRecords.addTodo({ name: 'new', tasks: [] });
@@ -174,6 +174,26 @@ describe('TodoRecords', function() {
     it('should give false if the todo is not present', function() {
       const todoRecords = TodoRecords.loadTodo([]);
       assert.isFalse(todoRecords.addTodoTask(1, 'new task'));
+    });
+  });
+
+  describe('editTaskName', function() {
+    it('should give true for editing task name of a todo', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      todoRecords.addTodoTask(1, 'new task');
+      assert.isTrue(todoRecords.editTaskName(1, 0, 'other name'));
+    });
+
+    it('should give false for editing task if todo is not present', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      assert.isFalse(todoRecords.editTaskName(1, 0, 'other name'));
+    });
+
+    it('should give false for editing task if task is not present', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      assert.isFalse(todoRecords.editTaskName(1, 10, 'other name'));
     });
   });
 });
