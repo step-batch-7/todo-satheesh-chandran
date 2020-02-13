@@ -1,5 +1,1 @@
-const getDataStorePath = function(env) {
-  return env.DATA_STORE || './data/todo.json';
-};
-
-module.exports = { getDataStorePath };
+module.exports = { DATA_STORE: `${__dirname}/${process.env.DATA_STORE}` };
