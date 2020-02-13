@@ -93,3 +93,87 @@ describe('Todo', function() {
     });
   });
 });
+
+describe('TodoRecords', function() {
+  describe('static loadTodo', function() {
+    it('should load all the ', function() {
+      const todoLists = [{ id: 1, tasks: [], name: 'some' }];
+      const todos = { todoLists };
+      const todoRecords = TodoRecords.loadTodo(todoLists);
+      assert.isTrue(todoRecords instanceof TodoRecords);
+      assert.deepStrictEqual(todoRecords, todos);
+    });
+  });
+
+  describe('generateId', function() {
+    it('should return one if the tasks are empty ', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      assert.equal(todoRecords.generateId(), 1);
+    });
+
+    it('should return 2 if the latest task has id 1', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      assert.equal(todoRecords.generateId(), 2);
+    });
+  });
+
+  describe('addTodo', function() {
+    it('should give true for adding new todo', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      assert.isTrue(todoRecords.addTodo({ name: 'new', tasks: [] }));
+    });
+  });
+
+  describe('deleteTodo', function() {
+    it('should give true for deleting an existing todo', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      assert.isTrue(todoRecords.deleteTodo(1));
+    });
+
+    it('should give false for deleting non existing todo', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      assert.isFalse(todoRecords.deleteTodo(10));
+    });
+  });
+
+  describe('findTodo', function() {
+    it('should give the matching todo with the id given', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      const expected = { name: 'new', tasks: [], id: 1 };
+      assert.deepStrictEqual(todoRecords.findTodo(1), expected);
+    });
+    it('should give the undefined if the todo not found', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      assert.isUndefined(todoRecords.findTodo(1));
+    });
+  });
+
+  describe('editTodoName', function() {
+    it('should give tue for editing name of the todo', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      assert.isTrue(todoRecords.editTodoName(1, 'new Name'));
+    });
+
+    it('should give false if the todo is not present to edit', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      assert.isFalse(todoRecords.editTodoName(1, 'new Name'));
+    });
+  });
+
+  describe('addTodoTsk', function() {
+    it('should give true for adding new task for existing todo', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      assert.isTrue(todoRecords.addTodoTask(1, 'new task'));
+    });
+
+    it('should give false if the todo is not present', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      assert.isFalse(todoRecords.addTodoTask(1, 'new task'));
+    });
+  });
+});
