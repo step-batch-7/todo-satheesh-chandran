@@ -14,7 +14,7 @@ h1 {
 h3 {
   color: #4caf50;
   font-size: 23px;
-  margin-bottom: 45px;
+  margin-bottom: 20px;
 }
 
 span {
@@ -66,7 +66,11 @@ form {
   border-bottom: 1px solid #4caf50;
   font-size: large;
   font-style: italic;
-  padding: 20px;
+  padding-bottom: 15px;
+}
+
+#signup-password {
+  margin-bottom: 35px;
 }
 
 button {
@@ -94,4 +98,15 @@ button:hover {
 
 input {
   margin-bottom: 10px;
+}
+
+h5 {
+  color: red;
+  text-align: start;
+  margin: 0px;
+  margin-top: 5px;
+  margin-bottom: 7px;
+  font-weight: lighter;
+  font-size: 11px;
+  visibility: hidden;
 }
