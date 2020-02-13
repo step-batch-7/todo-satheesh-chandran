@@ -216,4 +216,35 @@ describe('TodoRecords', function() {
       assert.isFalse(todoRecords.changeTaskStatus(10, 0));
     });
   });
+
+  describe('deleteTodoTask', function() {
+    it('should give true for deleting the task present', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      todoRecords.addTodoTask(1, 'new task');
+      assert.isTrue(todoRecords.deleteTodoTask(1, 0));
+    });
+
+    it('should give false for deleting the task not present', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      assert.isFalse(todoRecords.deleteTodoTask(1, 10));
+    });
+
+    it('should give false for deleting the task of todo not exist', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      assert.isFalse(todoRecords.deleteTodoTask(10, 10));
+    });
+  });
+});
+
+describe('TodoRecords', function() {
+  describe('toJSON', function() {
+    it('should give json of existing todos', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      const expected = JSON.stringify([{ name: 'new', tasks: [], id: 1 }]);
+      assert.strictEqual(todoRecords.toJSON(), expected);
+    });
+  });
 });
