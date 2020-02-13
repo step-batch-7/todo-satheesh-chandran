@@ -196,4 +196,24 @@ describe('TodoRecords', function() {
       assert.isFalse(todoRecords.editTaskName(1, 10, 'other name'));
     });
   });
+
+  describe('changeTaskStatus', function() {
+    it('should give true for changing the status of the task', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      todoRecords.addTodoTask(1, 'new task');
+      assert.isTrue(todoRecords.changeTaskStatus(1, 0));
+    });
+
+    it('should give false for changing status if task not exists', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      todoRecords.addTodo({ name: 'new', tasks: [] });
+      assert.isFalse(todoRecords.changeTaskStatus(1, 10));
+    });
+
+    it('should give false for changing status if todo not exists', function() {
+      const todoRecords = TodoRecords.loadTodo([]);
+      assert.isFalse(todoRecords.changeTaskStatus(10, 0));
+    });
+  });
 });
