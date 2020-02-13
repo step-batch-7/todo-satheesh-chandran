@@ -1,9 +1,9 @@
-const http = require('http');
+const { app } = require('./lib/routes');
 
-const { app } = require('./lib/handlers');
+const port = 8000;
 
 const main = function() {
-  const server = new http.Server(app.serve.bind(app));
-  server.listen(8000);
+  app.listen(port, () => process.stdout.write(`Listening at ${port}`));
 };
+
 main();

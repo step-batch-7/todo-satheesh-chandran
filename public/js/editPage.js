@@ -6,6 +6,7 @@ const sendXHR = function(method, url, callback, message = '') {
     }
   };
   req.open(method, url);
+  method === 'POST' && req.setRequestHeader('Content-type', 'application/json');
   req.send(message);
 };
 
