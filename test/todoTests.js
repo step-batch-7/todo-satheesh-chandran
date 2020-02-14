@@ -243,8 +243,8 @@ describe('TodoRecords', function() {
     it('should give json of existing todos', function() {
       const todoRecords = TodoRecords.loadTodo([]);
       todoRecords.addTodo({ name: 'new', tasks: [] });
-      const expected = JSON.stringify([{ name: 'new', tasks: [], id: 1 }]);
-      assert.strictEqual(todoRecords.toJSON(), expected);
+      const expected = [{ name: 'new', tasks: [], id: 1 }];
+      assert.deepStrictEqual(todoRecords.toJSON(), expected);
     });
   });
 });

@@ -101,15 +101,12 @@ describe('Not Allowed Method', () => {
 describe('POST', function() {
   beforeEach(() => sinon.replace(fs, 'writeFileSync', () => {}));
   afterEach(() => sinon.restore());
-  it('should save the given new todo list for url /list', done => {
-    const todoList = {
-      tasks: [{ status: false, name: 'hai' }],
-      name: 'satheesh'
-    };
+  it('should save the given new todo list for url /addNewTodo', done => {
     request(app)
       .post('/addNewTodo')
-      .send(JSON.stringify(todoList))
-      .expect('Content-Type', /json/)
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({ name: 'new Todo' }))
+      // .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });
 
@@ -117,6 +114,7 @@ describe('POST', function() {
     const addedList = { todoId: '1', taskName: 'hai' };
     request(app)
       .post('/newTask')
+      .set('Content-Type', 'application/json')
       .send(JSON.stringify(addedList))
       .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
@@ -126,6 +124,7 @@ describe('POST', function() {
     const body = { todoId: '1', taskId: '1' };
     request(app)
       .post('/toggleStatus')
+      .set('Content-Type', 'application/json')
       .send(JSON.stringify(body))
       .expect(STATUS_CODES.OK, done);
   });
@@ -134,6 +133,7 @@ describe('POST', function() {
     const body = { taskId: 1, todoId: 1, value: 'some' };
     request(app)
       .post('/editTask')
+      .set('Content-Type', 'application/json')
       .send(JSON.stringify(body))
       .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
@@ -143,6 +143,7 @@ describe('POST', function() {
     const body = { todoId: 1, value: 'some' };
     request(app)
       .post('/editTodo')
+      .set('Content-Type', 'application/json')
       .send(JSON.stringify(body))
       .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
@@ -152,6 +153,7 @@ describe('POST', function() {
     const deletedTask = { todoId: '1', taskId: '2' };
     request(app)
       .post('/deleteTask')
+      .set('Content-Type', 'application/json')
       .send(JSON.stringify(deletedTask))
       .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
@@ -160,7 +162,8 @@ describe('POST', function() {
   it('should delete the requested list from memory for url /delete', done => {
     request(app)
       .post('/delete')
-      .send('1')
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({ id: 1 }))
       .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });
