@@ -10,7 +10,7 @@
     "test": "export DATA_STORE='test/resource/todo.json'; nyc mocha",
     "lint": "eslint *.js public/js/*.js lib/*.js test/*.js",
     "alltests": "npm test && npm run lint",
-    "start": "export DATA_STORE='data/todo.json'; node server.js"
+    "start": "export DATA_STORE='data/todo.json'; nodemon server.js"
   },
   "repository": {
     "type": "git",

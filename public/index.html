@@ -38,15 +38,16 @@
       <h3>SIGN UP</h3>
       <!-- form action for signup -->
       <form action="signup" method="POST">
-        <h5>username already exists!!</h5>
+        <h5 class="hide">username already exists!!</h5>
         <input
           type="text"
           placeholder="User name"
           name="username"
           id="signup-name"
           class="text-bar"
+          oninput="checkUserName()"
         />
-        <h5>password must be 8 characters</h5>
+        <h5 class="hide">password must be 8 characters</h5>
         <input
           type="text"
           placeholder="Password"

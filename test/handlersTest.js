@@ -109,6 +109,7 @@ describe('POST', function() {
     request(app)
       .post('/addNewTodo')
       .send(JSON.stringify(todoList))
+      .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });
 
@@ -117,6 +118,7 @@ describe('POST', function() {
     request(app)
       .post('/newTask')
       .send(JSON.stringify(addedList))
+      .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });
 
@@ -133,6 +135,7 @@ describe('POST', function() {
     request(app)
       .post('/editTask')
       .send(JSON.stringify(body))
+      .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });
 
@@ -141,6 +144,7 @@ describe('POST', function() {
     request(app)
       .post('/editTodo')
       .send(JSON.stringify(body))
+      .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });
 
@@ -149,6 +153,7 @@ describe('POST', function() {
     request(app)
       .post('/deleteTask')
       .send(JSON.stringify(deletedTask))
+      .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });
 
@@ -156,7 +161,7 @@ describe('POST', function() {
     request(app)
       .post('/delete')
       .send('1')
-      .expect('Content-Type', 'application/json')
+      .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });
 });
