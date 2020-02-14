@@ -1,1 +1,3 @@
-module.exports = { DATA_STORE: `${__dirname}/${process.env.DATA_STORE}` };
+const { env } = process;
+
+module.exports = { DATA_STORE: `${__dirname}/${env.DATA_STORE}` };

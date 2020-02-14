@@ -12,7 +12,7 @@ describe('GET', function() {
         .get('/')
         .set('Accept', '*')
         .expect('Content-Type', /html/)
-        .expect(/\/css\/home.css/)
+        .expect(/\/css\/index.css/)
         .expect(STATUS_CODES.OK, done);
     });
 
