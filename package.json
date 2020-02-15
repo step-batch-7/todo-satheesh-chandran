@@ -7,10 +7,10 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "export DATA_STORE='test/resource/todo.json'; export SESSION_STORE='test/resource/sessions.json'; nyc mocha",
+    "test": "export DATA_STORE='test/resource/todo.json'; export SESSION_STORE='test/resource/sessions.json'; export CREDENTIALS_STORE='test/resource/userCredentials.json'; nyc mocha",
     "lint": "eslint *.js public/js/*.js lib/*.js test/*.js",
     "alltests": "npm test && npm run lint",
-    "start": "export DATA_STORE='data/todo.json'; export SESSION_STORE='data/sessions.json'; node server.js"
+    "start": "export DATA_STORE='data/todo.json'; export SESSION_STORE='data/sessions.json';export CREDENTIALS_STORE='data/userCredentials.json'; node server.js"
   },
   "repository": {
     "type": "git",
