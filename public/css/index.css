@@ -73,7 +73,8 @@ form {
   padding-bottom: 15px;
 }
 
-#signup-password {
+#signup-password,
+#login-username {
   margin-bottom: 35px;
 }
 

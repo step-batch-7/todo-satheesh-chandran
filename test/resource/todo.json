@@ -1,7 +1,10 @@
-[
-  {
-    "name": "sruthy",
-    "tasks": [{ "status": true, "name": "one", "id": 1 }],
-    "id": 1
-  }
-]
+{
+  "user": [
+    {
+      "name": "Experimenting",
+      "tasks": [{ "id": 0, "name": "Testing", "status": false }],
+      "id": 1
+    },
+    { "name": "hello", "tasks": [], "id": 2 }
+  ]
+}

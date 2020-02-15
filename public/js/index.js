@@ -2,6 +2,7 @@ const sendXHR = function(method, url, callback, message = '') {
   const req = new XMLHttpRequest();
   req.onload = function() {
     if (this.status === 200) {
+      console.log(this);
       callback(JSON.parse(this.responseText));
     }
   };

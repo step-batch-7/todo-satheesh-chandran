@@ -10,25 +10,23 @@
       <h3>LOGIN</h3>
       <!-- form action for login -->
       <form action="login" method="POST">
+        <h5 class="hide">Username or password is incorrect</h5>
         <input
           type="text"
           placeholder="Username"
           autofocus
           name="username"
+          id="login-username"
           class="text-bar"
         /><br />
         <input
           type="text"
           placeholder="Password"
           name="password"
+          id="login-password"
           class="text-bar"
         /><br />
-        <input
-          type="submit"
-          name="Login"
-          class="submit-button button"
-          value="Login"
-        />
+        <input type="submit" class="submit-button button" value="Login" />
       </form>
       <!-- form action for login -->
       <p class="info">Don't have an account?</p>

@@ -36,6 +36,7 @@ describe('GET', function() {
       request(app)
         .get('/todos')
         .expect('Content-Type', /json/)
+        .expect(/Experimenting/)
         .expect(STATUS_CODES.OK, done);
     });
   });
