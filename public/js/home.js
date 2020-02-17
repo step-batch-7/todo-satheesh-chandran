@@ -64,7 +64,7 @@ const search = function() {
 
 const showMatched = function(value, rows) {
   const regEx = new RegExp(`${value}`, 'i');
-  const matched = rows.filter(row => row.textContent.match(regEx));
+  const matched = rows.filter(row => row.firstChild.textContent.match(regEx));
   matched.forEach(row => row.classList.remove('hide'));
 };
 

@@ -32,7 +32,54 @@ const showUserErr = function({ isPresent }) {
     .previousElementSibling.classList.add('hide');
 };
 
-const checkUserName = function() {
-  const username = event.target.value;
-  sendXHR('POST', '/checkUserName', showUserErr, JSON.stringify({ username }));
+// const checkUserName = function() {
+//   const username = event.target.value;
+//   sendXHR('POST', '/checkUserName', showUserErr, JSON.stringify({ username }));
+// };
+
+const checkValidUser = function({ isValid }) {
+  if (!isValid) {
+    document.querySelector('h5').classList.remove('hide');
+    return;
+  }
+  document.location = 'home.html';
+};
+
+const login = function() {
+  const username = document.querySelector('#login-username').value;
+  const password = document.querySelector('#login-password').value;
+  const body = JSON.stringify({ username, password });
+  sendXHR('POST', '/login', checkValidUser, body);
+};
+
+const toggleErr = function(err) {
+  const errors = {
+    name: '#name-err',
+    confirm: '#confirm-err',
+    password: '#password-err'
+  };
+  const error = errors[err];
+  document.querySelector(error).classList.remove('hide');
+  setTimeout(() => document.querySelector(error).classList.add('hide'), 2000);
+};
+
+const checkValidName = function({ isValid }) {
+  if (!isValid) {
+    return toggleErr('name');
+  }
+  document.location = '/';
+};
+
+const signup = function() {
+  const username = document.querySelector('#signup-name').value;
+  const password = document.querySelector('#signup-password').value;
+  const confirm = document.querySelector('#signup-confirm').value;
+  if (password.length < 8) {
+    return toggleErr('password');
+  }
+  if (password === confirm) {
+    const body = JSON.stringify({ username, password });
+    return sendXHR('POST', '/signup', checkValidName, body);
+  }
+  toggleErr('confirm');
 };
