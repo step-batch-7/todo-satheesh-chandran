@@ -10,7 +10,23 @@ const STATUS_CODES = {
   REDIRECT: 301,
   FOUND: 302
 };
-const mockSessionManager = user => ({ getUser: sinon.mock().returns(user) });
+const mockSessionManager = user => ({
+  getUser: sinon.mock().returns(user),
+  createSession: sinon.mock().returns(1),
+  delete: sinon.mock().returns(true)
+});
+
+const mockUsers = () => ({
+  john: {
+    toJSON: sinon.mock().returns([todo]),
+    findTodo: sinon.mock().returns(todo),
+    addTodoTask: sinon.mock().returns(true),
+    changeTaskStatus: sinon.mock().returns(true),
+    editTaskName: sinon.mock().returns(true),
+    editTodoName: sinon.mock().returns(true),
+    deleteTodoTask: sinon.mock().returns(true)
+  }
+});
 
 const todo = {
   name: 'Experimenting',
@@ -51,7 +67,6 @@ describe('GET', function() {
 
     it('should give home.html for valid user accessing home.html', done => {
       app.locals.sessionManager = mockSessionManager('john');
-
       request(app)
         .get('/user/home.html')
         .set('Cookie', 'SID=1')
@@ -69,7 +84,7 @@ describe('GET', function() {
 
     it('should give all todos if user logged in', done => {
       app.locals.sessionManager = mockSessionManager('john');
-      app.locals.users = { john: [todo] };
+      app.locals.users = mockUsers();
       request(app)
         .get('/user/todos')
         .set('Cookie', 'SID=1')
@@ -120,7 +135,7 @@ describe('GET', function() {
       const todo = { name: 'Experimenting', tasks: [task], id: 1 };
       const expected = JSON.stringify(todo);
       app.locals.sessionManager = mockSessionManager('john');
-      app.locals.users = { john: { findTodo: sinon.mock().returns(todo) } };
+      app.locals.users = mockUsers();
       request(app)
         .get('/user/todo')
         .set('referer', 'http://localhost:8000/editPage.html?todoId=1')
@@ -174,12 +189,7 @@ describe('POST', function() {
   it('should save the new task given with url /newTask', done => {
     const newTask = { todoId: '1', taskName: 'hai' };
     app.locals.sessionManager = mockSessionManager('john');
-    app.locals.users = {
-      john: {
-        findTodo: sinon.mock().returns(todo),
-        addTodoTask: sinon.mock().returns(true)
-      }
-    };
+    app.locals.users = mockUsers();
     request(app)
       .post('/user/newTask')
       .set('Cookie', 'SID=1')
@@ -191,7 +201,7 @@ describe('POST', function() {
 
   it('should give Bad Request for POST not having required fields ', done => {
     app.locals.sessionManager = mockSessionManager('john');
-    app.locals.users = { john: { addTodoTask: sinon.mock().returns(true) } };
+    app.locals.users = mockUsers();
     request(app)
       .post('/user/newTask')
       .set('Cookie', 'SID=1')
@@ -202,12 +212,7 @@ describe('POST', function() {
 
   it('should delete tasks for url /toggleStatus', done => {
     app.locals.sessionManager = mockSessionManager('john');
-    app.locals.users = {
-      john: {
-        findTodo: sinon.mock().returns(todo),
-        changeTaskStatus: sinon.mock().returns(true)
-      }
-    };
+    app.locals.users = mockUsers();
     const body = { todoId: '1', taskId: '1' };
     request(app)
       .post('/user/toggleStatus')
@@ -219,12 +224,7 @@ describe('POST', function() {
 
   it('should edit the name of the task for url /editTask', done => {
     app.locals.sessionManager = mockSessionManager('john');
-    app.locals.users = {
-      john: {
-        findTodo: sinon.mock().returns(todo),
-        editTaskName: sinon.mock().returns(true)
-      }
-    };
+    app.locals.users = mockUsers();
     const body = { taskId: 1, todoId: 1, value: 'some' };
     request(app)
       .post('/user/editTask')
@@ -238,12 +238,7 @@ describe('POST', function() {
   it('should edit the name of the todo for url /editTodo', done => {
     const body = { todoId: 1, value: 'some' };
     app.locals.sessionManager = mockSessionManager('john');
-    app.locals.users = {
-      john: {
-        findTodo: sinon.mock().returns(todo),
-        editTodoName: sinon.mock().returns(true)
-      }
-    };
+    app.locals.users = mockUsers();
     request(app)
       .post('/user/editTodo')
       .set('Cookie', 'SID=1')
@@ -273,12 +268,7 @@ describe('POST', function() {
   it('should delete tasks for url /deleteTask', done => {
     const taskToRemove = { todoId: '1', taskId: '2' };
     app.locals.sessionManager = mockSessionManager('john');
-    app.locals.users = {
-      john: {
-        findTodo: sinon.mock().returns(todo),
-        deleteTodoTask: sinon.mock().returns(true)
-      }
-    };
+    app.locals.users = mockUsers();
     request(app)
       .post('/user/deleteTask')
       .set('Cookie', 'SID=1')
@@ -305,7 +295,7 @@ describe('POST', function() {
     });
 
     it('should return isValid true for successful login /login', done => {
-      app.locals.sessionManager = { createSession: sinon.mock().returns(1) };
+      app.locals.sessionManager = mockSessionManager('john');
       app.locals.userCredentials = { john: 'john' };
       request(app)
         .post('/login')
@@ -344,10 +334,7 @@ describe('POST', function() {
 
 describe('logout', function() {
   it('should redirect to login for /logout if user is logged', function(done) {
-    app.locals.sessionManager = {
-      getUser: sinon.mock().returns('john'),
-      delete: sinon.mock().returns(true)
-    };
+    app.locals.sessionManager = mockSessionManager('john');
     request(app)
       .get('/user/logout')
       .set('Cookie', 'SID=1')
