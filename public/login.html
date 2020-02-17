@@ -6,65 +6,63 @@
   </head>
   <body>
     <h1><span>Task </span>Manager</h1>
-    <div class="login-window">
-      <h3>LOGIN</h3>
-      <!-- form action for login -->
-      <h5 class="hide">Username or password is incorrect</h5>
-      <input
-        type="text"
-        placeholder="Username"
-        autofocus
-        name="username"
-        id="login-username"
-        class="text-bar"
-      />
-      <input
-        type="text"
-        placeholder="Password"
-        name="password"
-        id="login-password"
-        class="text-bar"
-      />
-      <button type="submit" onclick="login()" class="submit-button button">
-        Login
-      </button>
-      <!-- form action for login -->
-      <p class="info">Don't have an account?</p>
-      <button onclick="toggleWindow()" class="button">Sign Up</button>
-    </div>
-    <div class="signup-window invisible">
-      <h3>SIGN UP</h3>
-      <!-- form action for signup -->
-      <h5 id="name-err" class="hide">username already exists!!</h5>
-      <input
-        type="text"
-        placeholder="User name"
-        name="username"
-        id="signup-name"
-        class="text-bar"
-      />
-      <h5 id="password-err" class="hide">password must be 8 characters</h5>
-      <input
-        type="text"
-        placeholder="Password"
-        name="password"
-        id="signup-password"
-        class="text-bar"
-      />
-      <h5 id="confirm-err" class="hide">password didn't match</h5>
-      <input
-        type="text"
-        placeholder="Confirm Password"
-        id="signup-confirm"
-        name="confirm"
-        class="text-bar"
-      />
-      <button type="submit" class="submit-button button" onclick="signup()">
-        Signup
-      </button>
-      <!-- form action for signup -->
-      <p>Have An Account?</p>
-      <button onclick="toggleWindow()" class="button">Login</button>
+    <div class="container">
+      <div class="login-window">
+        <h3>LOGIN</h3>
+        <h5 class="hide">Username or password is incorrect</h5>
+        <input
+          type="text"
+          placeholder="Username"
+          autofocus
+          name="username"
+          id="login-username"
+          class="text-bar"
+        />
+        <input
+          type="text"
+          placeholder="Password"
+          name="password"
+          id="login-password"
+          class="text-bar"
+        />
+        <button type="submit" onclick="login()" class="submit-button button">
+          Login
+        </button>
+        <p class="info">Don't have an account?</p>
+        <button onclick="toggleWindow()" class="button">Sign Up</button>
+      </div>
+      <div class="signup-window invisible">
+        <h3>SIGN UP</h3>
+        <h5 id="name-err" class="hide">username already exists!!</h5>
+        <input
+          type="text"
+          placeholder="User name"
+          name="username"
+          id="signup-name"
+          class="text-bar"
+        />
+        <h5 id="password-err" class="hide">password must be 8 characters</h5>
+        <input
+          type="text"
+          placeholder="Password"
+          name="password"
+          id="signup-password"
+          class="text-bar"
+        />
+        <h5 id="confirm-err" class="hide">password didn't match</h5>
+        <input
+          type="text"
+          placeholder="Confirm Password"
+          id="signup-confirm"
+          name="confirm"
+          class="text-bar"
+        />
+        <button type="submit" class="submit-button button" onclick="signup()">
+          Signup
+        </button>
+        <p class="info">Have An Account?</p>
+        <button onclick="toggleWindow()" class="button">Login</button>
+      </div>
     </div>
   </body>
 </html>
