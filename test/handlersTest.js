@@ -12,18 +12,17 @@ const STATUS_CODES = {
   FOUND: 302
 };
 
-const todos = [
-  {
-    name: 'Experimenting',
-    tasks: [{ id: 0, name: 'Testing', status: false }],
-    id: 1
-  }
-];
-
-const TODOS = TodoRecords.loadTodo(todos);
-const users = { user: TODOS };
 describe('GET', function() {
   beforeEach(() => {
+    const todos = [
+      {
+        name: 'Experimenting',
+        tasks: [{ id: 0, name: 'Testing', status: false }],
+        id: 1
+      }
+    ];
+    const TODOS = TodoRecords.loadTodo(todos);
+    const users = { user: TODOS };
     app.locals.sessions = { 1: 'user' };
     app.locals.users = users;
     app.locals.userCredentials = { user: 'user' };
@@ -178,10 +177,19 @@ describe('Not Allowed Method', () => {
 
 describe('POST', function() {
   beforeEach(() => {
-    sinon.replace(fs, 'writeFileSync', () => {});
+    const todos = [
+      {
+        name: 'Experimenting',
+        tasks: [{ id: 0, name: 'Testing', status: false }],
+        id: 1
+      }
+    ];
+    const TODOS = TodoRecords.loadTodo(todos);
+    const users = { user: TODOS };
     app.locals.sessions = { 1: 'user' };
     app.locals.users = users;
     app.locals.userCredentials = { user: 'user' };
+    sinon.replace(fs, 'writeFileSync', () => {});
   });
   afterEach(() => sinon.restore());
   it('should save the given new todo list for url /addNewTodo', done => {
@@ -269,6 +277,22 @@ describe('POST', function() {
 });
 
 describe('POST', function() {
+  beforeEach(() => {
+    const todos = [
+      {
+        name: 'Experimenting',
+        tasks: [{ id: 0, name: 'Testing', status: false }],
+        id: 1
+      }
+    ];
+    const TODOS = TodoRecords.loadTodo(todos);
+    const users = { user: TODOS };
+    app.locals.sessions = { 1: 'user' };
+    app.locals.users = users;
+    app.locals.userCredentials = { user: 'user' };
+    sinon.replace(fs, 'writeFileSync', () => {});
+  });
+  afterEach(() => sinon.restore());
   describe('login', function() {
     it('should return isValid false for unsuccessful login /login', done => {
       request(app)
@@ -306,7 +330,7 @@ describe('POST', function() {
       request(app)
         .post('/signup')
         .set('Content-Type', 'application/json')
-        .send(JSON.stringify({ username: 'new user', password: 'user' }))
+        .send(JSON.stringify({ username: 'newuser', password: 'user' }))
         .expect('Content-Type', /json/)
         .expect(JSON.stringify({ isValid: true }))
         .expect(STATUS_CODES.OK, done);
