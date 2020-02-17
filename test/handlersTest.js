@@ -10,7 +10,7 @@ const STATUS_CODES = {
   REDIRECT: 301,
   FOUND: 302
 };
-const mockSessionManager = user => ({
+const mockSessions = user => ({
   getUser: sinon.mock().returns(user),
   createSession: sinon.mock().returns(1),
   delete: sinon.mock().returns(true)
@@ -66,7 +66,7 @@ describe('GET', function() {
     });
 
     it('should give home.html for valid user accessing home.html', done => {
-      app.locals.sessionManager = mockSessionManager('john');
+      app.locals.sessions = mockSessions('john');
       request(app)
         .get('/user/home.html')
         .set('Cookie', 'SID=1')
@@ -75,7 +75,7 @@ describe('GET', function() {
     });
 
     it('should redirect to home.html for / if user logged in', done => {
-      app.locals.sessionManager = mockSessionManager('john');
+      app.locals.sessions = mockSessions('john');
       request(app)
         .get('/')
         .set('Cookie', 'SID=1')
@@ -83,7 +83,7 @@ describe('GET', function() {
     });
 
     it('should give all todos if user logged in', done => {
-      app.locals.sessionManager = mockSessionManager('john');
+      app.locals.sessions = mockSessions('john');
       app.locals.users = mockUsers();
       request(app)
         .get('/user/todos')
@@ -102,7 +102,7 @@ describe('GET', function() {
 
   describe('edit page', function() {
     it('should give the editPage.html for /editPage.html?todoId=1', done => {
-      app.locals.sessionManager = mockSessionManager('john');
+      app.locals.sessions = mockSessions('john');
       request(app)
         .get('/user/editPage.html?todoId=1')
         .set('Cookie', 'SID=1')
@@ -112,7 +112,7 @@ describe('GET', function() {
     });
 
     it('should give the editPage.css for /css/editPage.css', done => {
-      app.locals.sessionManager = mockSessionManager('john');
+      app.locals.sessions = mockSessions('john');
       request(app)
         .get('/user/css/editPage.css')
         .set('Cookie', 'SID=1')
@@ -122,7 +122,7 @@ describe('GET', function() {
     });
 
     it('should give the editPage.js for /js/editPage.js', done => {
-      app.locals.sessionManager = mockSessionManager('john');
+      app.locals.sessions = mockSessions('john');
       request(app)
         .get('/user/js/editPage.js')
         .set('Cookie', 'SID=1')
@@ -134,7 +134,7 @@ describe('GET', function() {
       const task = { id: 0, name: 'Testing', status: false };
       const todo = { name: 'Experimenting', tasks: [task], id: 1 };
       const expected = JSON.stringify(todo);
-      app.locals.sessionManager = mockSessionManager('john');
+      app.locals.sessions = mockSessions('john');
       app.locals.users = mockUsers();
       request(app)
         .get('/user/todo')
@@ -175,7 +175,7 @@ describe('POST', function() {
   beforeEach(() => sinon.replace(fs, 'writeFileSync', () => {}));
   afterEach(() => sinon.restore());
   it('should save the given new todo list for url /addNewTodo', done => {
-    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.sessions = mockSessions('john');
     app.locals.users = { john: { addTodo: sinon.mock().returns(true) } };
     request(app)
       .post('/user/addNewTodo')
@@ -188,7 +188,7 @@ describe('POST', function() {
 
   it('should save the new task given with url /newTask', done => {
     const newTask = { todoId: '1', taskName: 'hai' };
-    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.sessions = mockSessions('john');
     app.locals.users = mockUsers();
     request(app)
       .post('/user/newTask')
@@ -200,7 +200,7 @@ describe('POST', function() {
   });
 
   it('should give Bad Request for POST not having required fields ', done => {
-    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.sessions = mockSessions('john');
     app.locals.users = mockUsers();
     request(app)
       .post('/user/newTask')
@@ -211,7 +211,7 @@ describe('POST', function() {
   });
 
   it('should delete tasks for url /toggleStatus', done => {
-    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.sessions = mockSessions('john');
     app.locals.users = mockUsers();
     const body = { todoId: '1', taskId: '1' };
     request(app)
@@ -223,7 +223,7 @@ describe('POST', function() {
   });
 
   it('should edit the name of the task for url /editTask', done => {
-    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.sessions = mockSessions('john');
     app.locals.users = mockUsers();
     const body = { taskId: 1, todoId: 1, value: 'some' };
     request(app)
@@ -237,7 +237,7 @@ describe('POST', function() {
 
   it('should edit the name of the todo for url /editTodo', done => {
     const body = { todoId: 1, value: 'some' };
-    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.sessions = mockSessions('john');
     app.locals.users = mockUsers();
     request(app)
       .post('/user/editTodo')
@@ -249,7 +249,7 @@ describe('POST', function() {
   });
 
   it('should delete the requested list from memory for url /delete', done => {
-    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.sessions = mockSessions('john');
     app.locals.users = {
       john: {
         findTodo: sinon.mock().returns(todo),
@@ -267,7 +267,7 @@ describe('POST', function() {
 
   it('should delete tasks for url /deleteTask', done => {
     const taskToRemove = { todoId: '1', taskId: '2' };
-    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.sessions = mockSessions('john');
     app.locals.users = mockUsers();
     request(app)
       .post('/user/deleteTask')
@@ -295,7 +295,7 @@ describe('POST', function() {
     });
 
     it('should return isValid true for successful login /login', done => {
-      app.locals.sessionManager = mockSessionManager('john');
+      app.locals.sessions = mockSessions('john');
       app.locals.userCredentials = { john: 'john' };
       request(app)
         .post('/login')
@@ -334,7 +334,7 @@ describe('POST', function() {
 
 describe('logout', function() {
   it('should redirect to login for /logout if user is logged', function(done) {
-    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.sessions = mockSessions('john');
     request(app)
       .get('/user/logout')
       .set('Cookie', 'SID=1')
