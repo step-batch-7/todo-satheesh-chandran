@@ -36,6 +36,7 @@ body {
 }
 
 h1 {
+  margin-top: 0px;
   font-weight: 1;
   font-size: 50px;
   padding: 20px;
@@ -115,4 +116,20 @@ button:hover {
 #table-list input {
   color: #4caf50;
   outline: none;
+}
+
+.logout {
+  cursor: pointer;
+  border-radius: 3px;
+  margin-top: 18px;
+  background-color: #4caf50;
+  color: white;
+  height: 25px;
+  width: 67px;
+  outline: none;
+}
+
+.logout-header {
+  display: flex;
+  justify-content: flex-end;
 }
