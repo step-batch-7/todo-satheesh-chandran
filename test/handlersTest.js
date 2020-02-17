@@ -2,8 +2,6 @@ const request = require('supertest');
 const sinon = require('sinon');
 const fs = require('fs');
 const { app } = require('../lib/routes');
-const { TodoRecords } = require('../lib/todo');
-const SessionManager = require('../lib/sessionManager');
 
 const STATUS_CODES = {
   OK: 200,
@@ -14,24 +12,17 @@ const STATUS_CODES = {
 };
 const mockSessionManager = user => ({ getUser: sinon.mock().returns(user) });
 
+const todo = {
+  name: 'Experimenting',
+  tasks: [{ id: 0, name: 'Testing', status: false }],
+  id: 1
+};
+
 describe('GET', function() {
-  // beforeEach(() => {
-  //   const todos = [
-  //     {
-  //       name: 'Experimenting',
-  //       tasks: [{ id: 0, name: 'Testing', status: false }],
-  //       id: 1
-  //     }
-  //   ];
-  //   const TODOS = TodoRecords.loadTodo(todos);
-  //   const users = { user: TODOS };
-  //   app.locals.sessionManager = new SessionManager();
-  //   app.locals.sessionManager.createSession('user');
-  //   app.locals.users = users;
-  //   app.locals.userCredentials = { user: 'user' };
-  // });
+  beforeEach(() => sinon.replace(fs, 'writeFileSync', () => {}));
+  afterEach(() => sinon.restore());
   describe('home page', function() {
-    it('should give the index.html for url / if user not logged in', done => {
+    it('should give the login.html for url / if user not logged in', done => {
       request(app)
         .get('/')
         .set('Accept', '*')
@@ -40,21 +31,21 @@ describe('GET', function() {
         .expect(STATUS_CODES.OK, done);
     });
 
-    it('should redirect to / if unknown user accessing home.html', done => {
+    it('should redirect login if unknown user access /user/home.html', done => {
       request(app)
-        .get('/home.html')
+        .get('/user/home.html')
         .expect(STATUS_CODES.FOUND, done);
     });
 
     it('should redirect to / if unknown user accessing home.css', done => {
       request(app)
-        .get('/css/home.css')
+        .get('/user/css/home.css')
         .expect(STATUS_CODES.FOUND, done);
     });
 
     it('should redirect to / if unknown user accessing home.js', done => {
       request(app)
-        .get('/js/home.js')
+        .get('/user/js/home.js')
         .expect(STATUS_CODES.FOUND, done);
     });
 
@@ -62,7 +53,7 @@ describe('GET', function() {
       app.locals.sessionManager = mockSessionManager('john');
 
       request(app)
-        .get('/home.html')
+        .get('/user/home.html')
         .set('Cookie', 'SID=1')
         .expect(STATUS_CODES.OK, done)
         .expect('Content-Type', /html/);
@@ -76,33 +67,29 @@ describe('GET', function() {
         .expect(STATUS_CODES.FOUND, done);
     });
 
-    it('should redirect to home.html for /index.html for user logged', done => {
+    it('should give all todos if user logged in', done => {
+      app.locals.sessionManager = mockSessionManager('john');
+      app.locals.users = { john: [todo] };
       request(app)
-        .get('/index.html')
+        .get('/user/todos')
         .set('Cookie', 'SID=1')
-        .expect(STATUS_CODES.FOUND, done);
-    });
-
-    it('should give the all todos if user logged in', done => {
-      request(app)
-        .get('/todos')
-        .set('Cookie', 'SID=1')
+        .expect(STATUS_CODES.OK, done)
         .expect('Content-Type', /json/)
-        .expect(/Experimenting/)
-        .expect(STATUS_CODES.OK, done);
+        .expect(/Experimenting/);
     });
 
-    it('should give 400 for /todos if user not logged in', done => {
+    it('should redirect to login for /user/todos if user not logged', done => {
       request(app)
-        .get('/todos')
-        .expect(STATUS_CODES.BAD_REQUEST, done);
+        .get('/user/todos')
+        .expect(STATUS_CODES.FOUND, done);
     });
   });
 
   describe('edit page', function() {
     it('should give the editPage.html for /editPage.html?todoId=1', done => {
+      app.locals.sessionManager = mockSessionManager('john');
       request(app)
-        .get('/editPage.html?todoId=1')
+        .get('/user/editPage.html?todoId=1')
         .set('Cookie', 'SID=1')
         .expect('Content-Type', /html/)
         .expect(/<title>edit page<\/title>/)
@@ -110,8 +97,9 @@ describe('GET', function() {
     });
 
     it('should give the editPage.css for /css/editPage.css', done => {
+      app.locals.sessionManager = mockSessionManager('john');
       request(app)
-        .get('/css/editPage.css')
+        .get('/user/css/editPage.css')
         .set('Cookie', 'SID=1')
         .expect('Content-Type', /css/)
         .expect(/.popUp-window {/)
@@ -119,8 +107,9 @@ describe('GET', function() {
     });
 
     it('should give the editPage.js for /js/editPage.js', done => {
+      app.locals.sessionManager = mockSessionManager('john');
       request(app)
-        .get('/js/editPage.js')
+        .get('/user/js/editPage.js')
         .set('Cookie', 'SID=1')
         .expect('Content-Type', /javascript/)
         .expect(STATUS_CODES.OK, done);
@@ -130,19 +119,21 @@ describe('GET', function() {
       const task = { id: 0, name: 'Testing', status: false };
       const todo = { name: 'Experimenting', tasks: [task], id: 1 };
       const expected = JSON.stringify(todo);
+      app.locals.sessionManager = mockSessionManager('john');
+      app.locals.users = { john: { findTodo: sinon.mock().returns(todo) } };
       request(app)
-        .get('/todo')
+        .get('/user/todo')
         .set('referer', 'http://localhost:8000/editPage.html?todoId=1')
         .set('Cookie', 'SID=1')
         .expect('Content-Type', /json/)
         .expect(expected)
         .expect(STATUS_CODES.OK, done);
     });
-    it('should give 400 for /todo if user not logged in', done => {
+    it('should redirect to login for /user/todo if user not logged', done => {
       request(app)
-        .get('/todo')
+        .get('/user/todo')
         .set('referer', 'http://localhost:8000/editPage.html?todoId=1')
-        .expect(STATUS_CODES.BAD_REQUEST, done);
+        .expect(STATUS_CODES.FOUND, done);
     });
   });
 });
@@ -166,26 +157,13 @@ describe('Not Allowed Method', () => {
 });
 
 describe('POST', function() {
-  beforeEach(() => {
-    const todos = [
-      {
-        name: 'Experimenting',
-        tasks: [{ id: 0, name: 'Testing', status: false }],
-        id: 1
-      }
-    ];
-    const TODOS = TodoRecords.loadTodo(todos);
-    const users = { user: TODOS };
-    app.locals.sessionManager = new SessionManager();
-    app.locals.sessionManager.createSession('user');
-    app.locals.users = users;
-    app.locals.userCredentials = { user: 'user' };
-    sinon.replace(fs, 'writeFileSync', () => {});
-  });
+  beforeEach(() => sinon.replace(fs, 'writeFileSync', () => {}));
   afterEach(() => sinon.restore());
   it('should save the given new todo list for url /addNewTodo', done => {
+    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.users = { john: { addTodo: sinon.mock().returns(true) } };
     request(app)
-      .post('/addNewTodo')
+      .post('/user/addNewTodo')
       .set('Content-Type', 'application/json')
       .set('Cookie', 'SID=1')
       .send(JSON.stringify({ name: 'new Todo' }))
@@ -194,19 +172,28 @@ describe('POST', function() {
   });
 
   it('should save the new task given with url /newTask', done => {
-    const addedList = { todoId: '1', taskName: 'hai' };
+    const newTask = { todoId: '1', taskName: 'hai' };
+    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.users = {
+      john: {
+        findTodo: sinon.mock().returns(todo),
+        addTodoTask: sinon.mock().returns(true)
+      }
+    };
     request(app)
-      .post('/newTask')
+      .post('/user/newTask')
       .set('Cookie', 'SID=1')
       .set('Content-Type', 'application/json')
-      .send(JSON.stringify(addedList))
+      .send(JSON.stringify(newTask))
       .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });
 
   it('should give Bad Request for POST not having required fields ', done => {
+    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.users = { john: { addTodoTask: sinon.mock().returns(true) } };
     request(app)
-      .post('/newTask')
+      .post('/user/newTask')
       .set('Cookie', 'SID=1')
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({}))
@@ -214,9 +201,16 @@ describe('POST', function() {
   });
 
   it('should delete tasks for url /toggleStatus', done => {
+    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.users = {
+      john: {
+        findTodo: sinon.mock().returns(todo),
+        changeTaskStatus: sinon.mock().returns(true)
+      }
+    };
     const body = { todoId: '1', taskId: '1' };
     request(app)
-      .post('/toggleStatus')
+      .post('/user/toggleStatus')
       .set('Cookie', 'SID=1')
       .set('Content-Type', 'application/json')
       .send(JSON.stringify(body))
@@ -224,9 +218,16 @@ describe('POST', function() {
   });
 
   it('should edit the name of the task for url /editTask', done => {
+    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.users = {
+      john: {
+        findTodo: sinon.mock().returns(todo),
+        editTaskName: sinon.mock().returns(true)
+      }
+    };
     const body = { taskId: 1, todoId: 1, value: 'some' };
     request(app)
-      .post('/editTask')
+      .post('/user/editTask')
       .set('Cookie', 'SID=1')
       .set('Content-Type', 'application/json')
       .send(JSON.stringify(body))
@@ -236,8 +237,15 @@ describe('POST', function() {
 
   it('should edit the name of the todo for url /editTodo', done => {
     const body = { todoId: 1, value: 'some' };
+    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.users = {
+      john: {
+        findTodo: sinon.mock().returns(todo),
+        editTodoName: sinon.mock().returns(true)
+      }
+    };
     request(app)
-      .post('/editTodo')
+      .post('/user/editTodo')
       .set('Cookie', 'SID=1')
       .set('Content-Type', 'application/json')
       .send(JSON.stringify(body))
@@ -246,8 +254,15 @@ describe('POST', function() {
   });
 
   it('should delete the requested list from memory for url /delete', done => {
+    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.users = {
+      john: {
+        findTodo: sinon.mock().returns(todo),
+        deleteTodo: sinon.mock().returns(true)
+      }
+    };
     request(app)
-      .post('/delete')
+      .post('/user/delete')
       .set('Cookie', 'SID=1')
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({ id: 1 }))
@@ -256,51 +271,46 @@ describe('POST', function() {
   });
 
   it('should delete tasks for url /deleteTask', done => {
-    const deletedTask = { todoId: '1', taskId: '2' };
+    const taskToRemove = { todoId: '1', taskId: '2' };
+    app.locals.sessionManager = mockSessionManager('john');
+    app.locals.users = {
+      john: {
+        findTodo: sinon.mock().returns(todo),
+        deleteTodoTask: sinon.mock().returns(true)
+      }
+    };
     request(app)
-      .post('/deleteTask')
+      .post('/user/deleteTask')
       .set('Cookie', 'SID=1')
       .set('Content-Type', 'application/json')
-      .send(JSON.stringify(deletedTask))
+      .send(JSON.stringify(taskToRemove))
       .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });
 });
 
 describe('POST', function() {
-  beforeEach(() => {
-    const todos = [
-      {
-        name: 'Experimenting',
-        tasks: [{ id: 0, name: 'Testing', status: false }],
-        id: 1
-      }
-    ];
-    const TODOS = TodoRecords.loadTodo(todos);
-    const users = { user: TODOS };
-    app.locals.sessionManager = new SessionManager();
-    app.locals.sessionManager.createSession('user');
-    app.locals.users = users;
-    app.locals.userCredentials = { user: 'user' };
-    sinon.replace(fs, 'writeFileSync', () => {});
-  });
+  beforeEach(() => sinon.replace(fs, 'writeFileSync', () => {}));
   afterEach(() => sinon.restore());
   describe('login', function() {
+    app.locals.userCredentials = { john: 'john' };
     it('should return isValid false for unsuccessful login /login', done => {
       request(app)
         .post('/login')
         .set('Content-Type', 'application/json')
-        .send(JSON.stringify({ username: 'notValid', password: 'user' }))
+        .send(JSON.stringify({ username: 'notValid', password: 'notValid' }))
         .expect('Content-Type', /json/)
         .expect(JSON.stringify({ isValid: false }))
         .expect(STATUS_CODES.OK, done);
     });
 
     it('should return isValid true for successful login /login', done => {
+      app.locals.sessionManager = { createSession: sinon.mock().returns(1) };
+      app.locals.userCredentials = { john: 'john' };
       request(app)
         .post('/login')
         .set('Content-Type', 'application/json')
-        .send(JSON.stringify({ username: 'user', password: 'user' }))
+        .send(JSON.stringify({ username: 'john', password: 'john' }))
         .expect('Content-Type', /json/)
         .expect(JSON.stringify({ isValid: true }))
         .expect(STATUS_CODES.OK, done);
@@ -309,20 +319,22 @@ describe('POST', function() {
 
   describe('signup', function() {
     it('should return isValid false if username present for /signup', done => {
+      app.locals.userCredentials = { john: 'john' };
       request(app)
         .post('/signup')
         .set('Content-Type', 'application/json')
-        .send(JSON.stringify({ username: 'user', password: 'user' }))
+        .send(JSON.stringify({ username: 'john', password: 'john' }))
         .expect('Content-Type', /json/)
         .expect(JSON.stringify({ isValid: false }))
         .expect(STATUS_CODES.OK, done);
     });
 
     it('should return isValid true if username not exist for /signup', done => {
+      app.locals.userCredentials = {};
       request(app)
         .post('/signup')
         .set('Content-Type', 'application/json')
-        .send(JSON.stringify({ username: 'newuser', password: 'user' }))
+        .send(JSON.stringify({ username: 'john', password: 'john' }))
         .expect('Content-Type', /json/)
         .expect(JSON.stringify({ isValid: true }))
         .expect(STATUS_CODES.OK, done);
@@ -331,14 +343,13 @@ describe('POST', function() {
 });
 
 describe('logout', function() {
-  it('should give 400 for /logout if user not logged', function(done) {
+  it('should redirect to login for /logout if user is logged', function(done) {
+    app.locals.sessionManager = {
+      getUser: sinon.mock().returns('john'),
+      delete: sinon.mock().returns(true)
+    };
     request(app)
-      .get('/logout')
-      .expect(STATUS_CODES.BAD_REQUEST, done);
-  });
-  it('should redirect for /logout if user is logged', function(done) {
-    request(app)
-      .get('/logout')
+      .get('/user/logout')
       .set('Cookie', 'SID=1')
       .expect(STATUS_CODES.FOUND, done);
   });
