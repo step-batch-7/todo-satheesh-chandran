@@ -32,11 +32,6 @@ const showUserErr = function({ isPresent }) {
     .previousElementSibling.classList.add('hide');
 };
 
-// const checkUserName = function() {
-//   const username = event.target.value;
-//   sendXHR('POST', '/checkUserName', showUserErr, JSON.stringify({ username }));
-// };
-
 const checkValidUser = function({ isValid }) {
   if (!isValid) {
     document.querySelector('h5').classList.remove('hide');

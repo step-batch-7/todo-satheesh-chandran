@@ -13,6 +13,7 @@ const STATUS_CODES = {
 
 describe('GET', function() {
   describe('home page', function() {
+    app.locals.sessions = { 1: 'user' };
     it('should give the index.html for url / if user not logged in', done => {
       request(app)
         .get('/')
@@ -22,25 +23,29 @@ describe('GET', function() {
         .expect(STATUS_CODES.OK, done);
     });
 
-    it('should redirect to / unknown user have to access home.html', done => {
+    it('should redirect to / if unknown user accessing home.html', done => {
       request(app)
         .get('/home.html')
         .expect(STATUS_CODES.FOUND, done);
     });
 
-    it('should give the home.css url /css/home.css', done => {
+    it('should redirect to / if unknown user accessing home.css', done => {
       request(app)
         .get('/css/home.css')
-        .expect('Content-Type', /css/)
-        .expect(/body {/)
-        .expect(STATUS_CODES.OK, done);
+        .expect(STATUS_CODES.FOUND, done);
     });
 
-    it('should give the home.js url /js/home.js', done => {
+    it('should redirect to / if unknown user accessing home.js', done => {
       request(app)
         .get('/js/home.js')
-        .expect('Content-Type', /javascript/)
-        .expect(/updateTodosOnPage/)
+        .expect(STATUS_CODES.FOUND, done);
+    });
+
+    it('should give home.html for valid user accessing home.html', done => {
+      request(app)
+        .get('/home.html')
+        .set('Cookie', 'SID=1')
+        .expect('Content-Type', /html/)
         .expect(STATUS_CODES.OK, done);
     });
 
@@ -200,22 +205,26 @@ describe('POST', function() {
       .expect(STATUS_CODES.OK, done);
   });
 
-  it('should redirect to home.html for successful login /login', done => {
+  it('should return isValid true for successful login /login', done => {
     request(app)
       .post('/login')
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({ username: 'user', password: 'user' }))
-      .expect(STATUS_CODES.FOUND, done);
+      .expect('Content-Type', /json/)
+      .expect(JSON.stringify({ isValid: true }))
+      .expect(STATUS_CODES.OK, done);
   });
 });
 
 describe('POST', function() {
-  it('should give 404 for unsuccessful login /login', done => {
+  it('should return isValid false for unsuccessful login /login', done => {
     request(app)
       .post('/login')
       .set('Content-Type', 'application/json')
-      .send(JSON.stringify({ username: 'user', password: 'wrong password' }))
-      .expect(STATUS_CODES.NOT_FOUND, done);
+      .send(JSON.stringify({ username: 'notValid', password: 'user' }))
+      .expect('Content-Type', /json/)
+      .expect(JSON.stringify({ isValid: false }))
+      .expect(STATUS_CODES.OK, done);
   });
 
   it('should give Bad Request for POST not having required fields ', done => {
