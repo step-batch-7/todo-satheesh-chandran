@@ -2,6 +2,7 @@ const request = require('supertest');
 const sinon = require('sinon');
 const fs = require('fs');
 const { app } = require('../lib/routes');
+const { TodoRecords } = require('../lib/todo');
 
 const STATUS_CODES = {
   OK: 200,
@@ -11,9 +12,23 @@ const STATUS_CODES = {
   FOUND: 302
 };
 
+const todos = [
+  {
+    name: 'Experimenting',
+    tasks: [{ id: 0, name: 'Testing', status: false }],
+    id: 1
+  }
+];
+
+const TODOS = TodoRecords.loadTodo(todos);
+const users = { user: TODOS };
 describe('GET', function() {
   describe('home page', function() {
-    app.locals.sessions = { 1: 'user' };
+    beforeEach(() => {
+      app.locals.sessions = { 1: 'user' };
+      app.locals.users = users;
+      app.locals.userCredentials = { user: 'user' };
+    });
     it('should give the index.html for url / if user not logged in', done => {
       request(app)
         .get('/')
@@ -184,6 +199,16 @@ describe('POST', function() {
       .expect(STATUS_CODES.OK, done);
   });
 
+  it('should delete the requested list from memory for url /delete', done => {
+    request(app)
+      .post('/delete')
+      .set('Cookie', 'SID=1')
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({ id: 1 }))
+      .expect('Content-Type', /json/)
+      .expect(STATUS_CODES.OK, done);
+  });
+
   it('should delete tasks for url /deleteTask', done => {
     const deletedTask = { todoId: '1', taskId: '2' };
     request(app)
@@ -191,16 +216,6 @@ describe('POST', function() {
       .set('Cookie', 'SID=1')
       .set('Content-Type', 'application/json')
       .send(JSON.stringify(deletedTask))
-      .expect('Content-Type', /json/)
-      .expect(STATUS_CODES.OK, done);
-  });
-
-  it('should delete the requested list from memory for url /delete', done => {
-    request(app)
-      .post('/delete')
-      .set('Cookie', 'SID=1')
-      .set('Content-Type', 'application/json')
-      .send(JSON.stringify({ id: 1 }))
       .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });

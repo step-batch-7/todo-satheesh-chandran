@@ -1,9 +1,0 @@
-{
-  "user": [
-    {
-      "name": "Experimenting",
-      "tasks": [{ "id": 0, "name": "Testing", "status": false }],
-      "id": 1
-    }
-  ]
-}
