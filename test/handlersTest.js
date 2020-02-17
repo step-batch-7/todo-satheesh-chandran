@@ -23,12 +23,12 @@ const todos = [
 const TODOS = TodoRecords.loadTodo(todos);
 const users = { user: TODOS };
 describe('GET', function() {
+  beforeEach(() => {
+    app.locals.sessions = { 1: 'user' };
+    app.locals.users = users;
+    app.locals.userCredentials = { user: 'user' };
+  });
   describe('home page', function() {
-    beforeEach(() => {
-      app.locals.sessions = { 1: 'user' };
-      app.locals.users = users;
-      app.locals.userCredentials = { user: 'user' };
-    });
     it('should give the index.html for url / if user not logged in', done => {
       request(app)
         .get('/')
@@ -71,6 +71,13 @@ describe('GET', function() {
         .expect(STATUS_CODES.FOUND, done);
     });
 
+    it('should redirect to home.html for /index.html for user logged', done => {
+      request(app)
+        .get('/index.html')
+        .set('Cookie', 'SID=1')
+        .expect(STATUS_CODES.FOUND, done);
+    });
+
     it('should give the all todos if user logged in', done => {
       request(app)
         .get('/todos')
@@ -78,6 +85,26 @@ describe('GET', function() {
         .expect('Content-Type', /json/)
         .expect(/Experimenting/)
         .expect(STATUS_CODES.OK, done);
+    });
+
+    it('should give 400 for /todos if user not logged in', done => {
+      request(app)
+        .get('/todos')
+        .expect(STATUS_CODES.BAD_REQUEST, done);
+    });
+  });
+
+  describe('logout', function() {
+    it('should give 400 for /logout if user not logged', function(done) {
+      request(app)
+        .get('/logout')
+        .expect(STATUS_CODES.BAD_REQUEST, done);
+    });
+    it('should redirect for /logout if user is logged', function(done) {
+      request(app)
+        .get('/logout')
+        .set('Cookie', 'SID=1')
+        .expect(STATUS_CODES.FOUND, done);
     });
   });
 
@@ -122,6 +149,12 @@ describe('GET', function() {
         .expect(expected)
         .expect(STATUS_CODES.OK, done);
     });
+    it('should give 400 for /todo if user not logged in', done => {
+      request(app)
+        .get('/todo')
+        .set('referer', 'http://localhost:8000/editPage.html?todoId=1')
+        .expect(STATUS_CODES.BAD_REQUEST, done);
+    });
   });
 });
 
@@ -144,7 +177,12 @@ describe('Not Allowed Method', () => {
 });
 
 describe('POST', function() {
-  beforeEach(() => sinon.replace(fs, 'writeFileSync', () => {}));
+  beforeEach(() => {
+    sinon.replace(fs, 'writeFileSync', () => {});
+    app.locals.sessions = { 1: 'user' };
+    app.locals.users = users;
+    app.locals.userCredentials = { user: 'user' };
+  });
   afterEach(() => sinon.restore());
   it('should save the given new todo list for url /addNewTodo', done => {
     request(app)
@@ -165,6 +203,15 @@ describe('POST', function() {
       .send(JSON.stringify(addedList))
       .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
+  });
+
+  it('should give Bad Request for POST not having required fields ', done => {
+    request(app)
+      .post('/newTask')
+      .set('Cookie', 'SID=1')
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({}))
+      .expect(STATUS_CODES.BAD_REQUEST, done);
   });
 
   it('should delete tasks for url /toggleStatus', done => {
@@ -219,35 +266,50 @@ describe('POST', function() {
       .expect('Content-Type', /json/)
       .expect(STATUS_CODES.OK, done);
   });
-
-  it('should return isValid true for successful login /login', done => {
-    request(app)
-      .post('/login')
-      .set('Content-Type', 'application/json')
-      .send(JSON.stringify({ username: 'user', password: 'user' }))
-      .expect('Content-Type', /json/)
-      .expect(JSON.stringify({ isValid: true }))
-      .expect(STATUS_CODES.OK, done);
-  });
 });
 
 describe('POST', function() {
-  it('should return isValid false for unsuccessful login /login', done => {
-    request(app)
-      .post('/login')
-      .set('Content-Type', 'application/json')
-      .send(JSON.stringify({ username: 'notValid', password: 'user' }))
-      .expect('Content-Type', /json/)
-      .expect(JSON.stringify({ isValid: false }))
-      .expect(STATUS_CODES.OK, done);
+  describe('login', function() {
+    it('should return isValid false for unsuccessful login /login', done => {
+      request(app)
+        .post('/login')
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify({ username: 'notValid', password: 'user' }))
+        .expect('Content-Type', /json/)
+        .expect(JSON.stringify({ isValid: false }))
+        .expect(STATUS_CODES.OK, done);
+    });
+
+    it('should return isValid true for successful login /login', done => {
+      request(app)
+        .post('/login')
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify({ username: 'user', password: 'user' }))
+        .expect('Content-Type', /json/)
+        .expect(JSON.stringify({ isValid: true }))
+        .expect(STATUS_CODES.OK, done);
+    });
   });
 
-  it('should give Bad Request for POST not having required fields ', done => {
-    request(app)
-      .post('/newTask')
-      .set('Cookie', 'SID=1')
-      .set('Content-Type', 'application/json')
-      .send(JSON.stringify({}))
-      .expect(STATUS_CODES.BAD_REQUEST, done);
+  describe('signup', function() {
+    it('should return isValid false if username present for /signup', done => {
+      request(app)
+        .post('/signup')
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify({ username: 'user', password: 'user' }))
+        .expect('Content-Type', /json/)
+        .expect(JSON.stringify({ isValid: false }))
+        .expect(STATUS_CODES.OK, done);
+    });
+
+    it('should return isValid true if username not exist for /signup', done => {
+      request(app)
+        .post('/signup')
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify({ username: 'new user', password: 'user' }))
+        .expect('Content-Type', /json/)
+        .expect(JSON.stringify({ isValid: true }))
+        .expect(STATUS_CODES.OK, done);
+    });
   });
 });
