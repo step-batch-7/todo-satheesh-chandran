@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "nyc mocha",
+    "error": "nyc mocha --bail",
     "lint": "eslint *.js public/js/*.js lib/*.js test/*.js",
     "alltests": "npm test && npm run lint",
     "start": "export DATA_STORE='data/todo.json'; export CREDENTIALS_STORE='data/userCredentials.json'; node server.js"

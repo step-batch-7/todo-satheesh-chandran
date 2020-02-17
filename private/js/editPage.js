@@ -34,7 +34,7 @@ const appendTableRow = function(todoList) {
 };
 
 const main = function() {
-  sendXHR('GET', '/todo', appendTableRow);
+  sendXHR('GET', 'todo', appendTableRow);
 };
 
 window.onload = main;
@@ -69,12 +69,12 @@ const addNewTasks = function(event) {
 const editTask = function(taskId, value) {
   const todoId = document.querySelector('h3').id;
   const body = { todoId, taskId, value };
-  sendXHR('POST', '/editTask', appendTableRow, JSON.stringify(body));
+  sendXHR('POST', 'editTask', appendTableRow, JSON.stringify(body));
 };
 
 const editTodo = function(todoId, value) {
   const body = { todoId, value };
-  sendXHR('POST', '/editTodo', appendTableRow, JSON.stringify(body));
+  sendXHR('POST', 'editTodo', appendTableRow, JSON.stringify(body));
 };
 
 const replaceName = function(target, inputTag) {

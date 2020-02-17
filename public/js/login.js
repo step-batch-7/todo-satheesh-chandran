@@ -37,7 +37,7 @@ const checkValidUser = function({ isValid }) {
     document.querySelector('h5').classList.remove('hide');
     return;
   }
-  document.location = 'home.html';
+  document.location = '/user/home.html';
 };
 
 const login = function() {

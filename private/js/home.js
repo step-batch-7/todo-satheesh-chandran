@@ -1,5 +1,5 @@
 const generateTodos = function(html, { id, name }) {
-  const todo = `<tr><td><a href="./editPage.html?todoId=${id}">${name}</a></td>
+  const todo = `<tr><td><a href="editPage.html?todoId=${id}">${name}</a></td>
   <td id="${id}"><button onclick="deleteList()">delete</button></td></tr>`;
   return html + todo;
 };
@@ -7,7 +7,7 @@ const generateTodos = function(html, { id, name }) {
 const generateTodosWithTasks = function(html, { id, name, tasks }) {
   const toTaskHtml = function(html, task) {
     const taskHtml = `<tr><td>${task.name}</td>
-      <td><a href="./editPage.html?todoId=${id}">${name}</a></td></tr>`;
+      <td><a href="editPage.html?todoId=${id}">${name}</a></td></tr>`;
     return html + taskHtml;
   };
   return html + tasks.reduce(toTaskHtml, '');
@@ -35,7 +35,7 @@ const sendXHR = function(method, url, callback, message = '') {
 const deleteList = function() {
   const [, parent] = event.path;
   const id = parent.id;
-  sendXHR('POST', '/delete', updateTodosOnPage, `{ "id": "${id}" }`);
+  sendXHR('POST', 'delete', updateTodosOnPage, `{ "id": "${id}" }`);
 };
 
 const addNewTodo = function() {
@@ -48,7 +48,7 @@ const addNewTodo = function() {
 };
 
 const main = () => {
-  sendXHR('GET', '/todos', updateTodosOnPage);
+  sendXHR('GET', 'todos', updateTodosOnPage);
 };
 
 window.onload = main;

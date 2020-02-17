@@ -3,6 +3,7 @@ const sinon = require('sinon');
 const fs = require('fs');
 const { app } = require('../lib/routes');
 const { TodoRecords } = require('../lib/todo');
+const SessionManager = require('../lib/sessionManager');
 
 const STATUS_CODES = {
   OK: 200,
@@ -11,22 +12,24 @@ const STATUS_CODES = {
   REDIRECT: 301,
   FOUND: 302
 };
+const mockSessionManager = user => ({ getUser: sinon.mock().returns(user) });
 
 describe('GET', function() {
-  beforeEach(() => {
-    const todos = [
-      {
-        name: 'Experimenting',
-        tasks: [{ id: 0, name: 'Testing', status: false }],
-        id: 1
-      }
-    ];
-    const TODOS = TodoRecords.loadTodo(todos);
-    const users = { user: TODOS };
-    app.locals.sessions = { 1: 'user' };
-    app.locals.users = users;
-    app.locals.userCredentials = { user: 'user' };
-  });
+  // beforeEach(() => {
+  //   const todos = [
+  //     {
+  //       name: 'Experimenting',
+  //       tasks: [{ id: 0, name: 'Testing', status: false }],
+  //       id: 1
+  //     }
+  //   ];
+  //   const TODOS = TodoRecords.loadTodo(todos);
+  //   const users = { user: TODOS };
+  //   app.locals.sessionManager = new SessionManager();
+  //   app.locals.sessionManager.createSession('user');
+  //   app.locals.users = users;
+  //   app.locals.userCredentials = { user: 'user' };
+  // });
   describe('home page', function() {
     it('should give the index.html for url / if user not logged in', done => {
       request(app)
@@ -56,14 +59,17 @@ describe('GET', function() {
     });
 
     it('should give home.html for valid user accessing home.html', done => {
+      app.locals.sessionManager = mockSessionManager('john');
+
       request(app)
         .get('/home.html')
         .set('Cookie', 'SID=1')
-        .expect('Content-Type', /html/)
-        .expect(STATUS_CODES.OK, done);
+        .expect(STATUS_CODES.OK, done)
+        .expect('Content-Type', /html/);
     });
 
     it('should redirect to home.html for / if user logged in', done => {
+      app.locals.sessionManager = mockSessionManager('john');
       request(app)
         .get('/')
         .set('Cookie', 'SID=1')
@@ -93,23 +99,7 @@ describe('GET', function() {
     });
   });
 
-  describe('logout', function() {
-    it('should give 400 for /logout if user not logged', function(done) {
-      request(app)
-        .get('/logout')
-        .expect(STATUS_CODES.BAD_REQUEST, done);
-    });
-    it('should redirect for /logout if user is logged', function(done) {
-      request(app)
-        .get('/logout')
-        .set('Cookie', 'SID=1')
-        .expect(STATUS_CODES.FOUND, done);
-    });
-  });
-
   describe('edit page', function() {
-    beforeEach(() => sinon.replace(fs, 'writeFileSync', () => {}));
-    afterEach(() => sinon.restore());
     it('should give the editPage.html for /editPage.html?todoId=1', done => {
       request(app)
         .get('/editPage.html?todoId=1')
@@ -186,7 +176,8 @@ describe('POST', function() {
     ];
     const TODOS = TodoRecords.loadTodo(todos);
     const users = { user: TODOS };
-    app.locals.sessions = { 1: 'user' };
+    app.locals.sessionManager = new SessionManager();
+    app.locals.sessionManager.createSession('user');
     app.locals.users = users;
     app.locals.userCredentials = { user: 'user' };
     sinon.replace(fs, 'writeFileSync', () => {});
@@ -287,7 +278,8 @@ describe('POST', function() {
     ];
     const TODOS = TodoRecords.loadTodo(todos);
     const users = { user: TODOS };
-    app.locals.sessions = { 1: 'user' };
+    app.locals.sessionManager = new SessionManager();
+    app.locals.sessionManager.createSession('user');
     app.locals.users = users;
     app.locals.userCredentials = { user: 'user' };
     sinon.replace(fs, 'writeFileSync', () => {});
@@ -335,5 +327,19 @@ describe('POST', function() {
         .expect(JSON.stringify({ isValid: true }))
         .expect(STATUS_CODES.OK, done);
     });
+  });
+});
+
+describe('logout', function() {
+  it('should give 400 for /logout if user not logged', function(done) {
+    request(app)
+      .get('/logout')
+      .expect(STATUS_CODES.BAD_REQUEST, done);
+  });
+  it('should redirect for /logout if user is logged', function(done) {
+    request(app)
+      .get('/logout')
+      .set('Cookie', 'SID=1')
+      .expect(STATUS_CODES.FOUND, done);
   });
 });
