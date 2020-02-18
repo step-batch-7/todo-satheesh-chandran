@@ -25,12 +25,13 @@ const appendHtmlToDom = function(selector, html) {
   document.querySelector(selector).appendChild(tbody.firstChild);
 };
 
-const appendTableRow = function(todoList) {
+const appendTableRow = function({ user, todo }) {
+  document.querySelector('#user').innerHTML = `Not <span>${user}</span>?`;
   document.querySelector('#list-table tbody').innerHTML = '';
   const title = document.querySelector('body h3');
-  title.innerText = todoList.name;
-  title.id = todoList.id;
-  todoList.tasks.forEach(getTableRowTemplate);
+  title.innerText = todo.name;
+  title.id = todo.id;
+  todo.tasks.forEach(getTableRowTemplate);
 };
 
 const main = function() {

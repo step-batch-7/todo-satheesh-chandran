@@ -5,6 +5,12 @@
   transform: translate(-50%, -50%);
 }
 
+#user {
+  margin-top: 22px;
+  margin-left: 25px;
+  margin-right: 10px;
+}
+
 .hide {
   display: none;
 }

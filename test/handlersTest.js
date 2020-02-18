@@ -133,7 +133,7 @@ describe('GET', function() {
     it('should give a todo for /todo', done => {
       const task = { id: 0, name: 'Testing', status: false };
       const todo = { name: 'Experimenting', tasks: [task], id: 1 };
-      const expected = JSON.stringify(todo);
+      const expected = JSON.stringify({ user: 'john', todo });
       app.locals.sessions = mockSessions('john');
       app.locals.users = mockUsers();
       request(app)
