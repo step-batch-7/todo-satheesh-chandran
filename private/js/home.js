@@ -6,16 +6,17 @@ const generateTodos = function(html, { id, name }) {
 
 const generateTodosWithTasks = function(html, { id, name, tasks }) {
   const toTaskHtml = function(html, task) {
-    const taskHtml = `<tr><td>${task.name}</td>
+    const taskHtml = `<tr><td class="tasks">${task.name}</td>
       <td><a href="editPage.html?todoId=${id}">${name}</a></td></tr>`;
     return html + taskHtml;
   };
   return html + tasks.reduce(toTaskHtml, '');
 };
 
-const updateTodosOnPage = function(todos) {
+const updateTodosOnPage = function({ user, todos }) {
   const todoHTML = todos.reduce(generateTodos, '');
   const taskHTML = todos.reduce(generateTodosWithTasks, '');
+  document.querySelector('#user').innerHTML = `Not <span>${user}</span>? `;
   document.querySelector('#list-table tbody').innerHTML = todoHTML;
   document.querySelector('.list-table tbody').innerHTML = taskHTML;
 };
@@ -71,7 +72,7 @@ const showMatched = function(value, rows) {
 const searchByTodo = function(text) {
   const rows = Array.from(document.querySelector('tbody').children);
   rows.forEach(row => row.classList.add('hide'));
-  showMatched(event.target.value, rows);
+  showMatched(text, rows);
 };
 
 const toggleHideTable = function(text) {

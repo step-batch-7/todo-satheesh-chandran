@@ -77,8 +77,8 @@ a {
   border-bottom: 1px solid #4caf50;
   font-size: large;
   font-style: italic;
-  margin-top: 10px;
-  margin-right: 10px;
+  margin-top: 13px;
+  margin-right: -5px;
 }
 
 .search-box {
@@ -118,6 +118,16 @@ a {
   width: 1.5vw;
   border-radius: 50%;
   background: white;
+}
+
+.tasks {
+  word-break: break-all;
+}
+
+#user {
+  margin-top: 22px;
+  margin-left: 25px;
+  margin-right: 10px;
 }
 
 #task {

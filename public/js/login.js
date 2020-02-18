@@ -20,18 +20,6 @@ const toggleWindow = function() {
   document.querySelector('.login-window').classList.remove('invisible');
 };
 
-const showUserErr = function({ isPresent }) {
-  if (isPresent) {
-    document
-      .querySelector('#signup-name')
-      .previousElementSibling.classList.remove('hide');
-    return;
-  }
-  document
-    .querySelector('#signup-name')
-    .previousElementSibling.classList.add('hide');
-};
-
 const checkValidUser = function({ isValid }) {
   if (!isValid) {
     document.querySelector('h5').classList.remove('hide');
@@ -51,7 +39,8 @@ const toggleErr = function(err) {
   const errors = {
     name: '#name-err',
     confirm: '#confirm-err',
-    password: '#password-err'
+    password: '#password-err',
+    type: '#type-err'
   };
   const error = errors[err];
   document.querySelector(error).classList.remove('hide');
@@ -69,6 +58,7 @@ const signup = function() {
   const username = document.querySelector('#signup-name').value;
   const password = document.querySelector('#signup-password').value;
   const confirm = document.querySelector('#signup-confirm').value;
+  if (!username.trim()) return toggleErr('type');
   if (password.length < 8) {
     return toggleErr('password');
   }

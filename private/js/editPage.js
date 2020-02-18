@@ -77,10 +77,18 @@ const editTodo = function(todoId, value) {
   sendXHR('POST', 'editTodo', appendTableRow, JSON.stringify(body));
 };
 
+const toggleEdit = function(property) {
+  if (property) {
+    document.querySelector('#container').classList.add('hide');
+    return document.querySelector('.popUp-window').classList.remove('hide');
+  }
+  document.querySelector('#container').classList.remove('hide');
+  document.querySelector('.popUp-window').classList.add('hide');
+};
+
 const replaceName = function(target, inputTag) {
   if (event.key === 'Enter' && inputTag.value.trim() !== '') {
-    document.querySelector('#container').style['display'] = 'block';
-    document.querySelector('.popUp-window').style['display'] = 'none';
+    toggleEdit();
     const edit = target.classList.contains('task') ? editTask : editTodo;
     edit(target.id, inputTag.value);
   }
@@ -88,8 +96,7 @@ const replaceName = function(target, inputTag) {
 
 const popUpEditWindow = function() {
   const inputTag = document.querySelector('.popUp-window input');
-  document.querySelector('#container').style['display'] = 'none';
-  document.querySelector('.popUp-window').style['display'] = 'block';
+  toggleEdit('show');
   const currentTarget = event.currentTarget;
   inputTag.value = currentTarget.innerHTML;
   inputTag.onkeydown = () => replaceName(currentTarget, inputTag);
